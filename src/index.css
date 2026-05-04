@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui;
+  --color-brand-bg: #050614;
+  --color-brand-blue: #00d2ff;
+  --color-brand-purple: #7000ff;
+  --color-brand-whatsapp: #25d366;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-bg text-slate-100 antialiased selection:bg-brand-blue selection:text-brand-bg;
+  }
+}
+
+.bento-card {
+  @apply bg-white/3 border border-white/10 rounded-[24px] backdrop-blur-[10px] transition-all duration-300 hover:border-brand-blue/50;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-linear-to-r from-white to-brand-blue;
+}
+
+.glass {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10;
+}
+
+.btn-whatsapp {
+  @apply bg-linear-to-br from-[#25d366] to-[#128c7e] text-white shadow-lg shadow-brand-whatsapp/20;
+}
+
+.btn-glass {
+  @apply bg-white/5 border border-white/20 backdrop-blur-md hover:bg-white/10 transition-all;
+}
+
+@keyframes pulse-blue {
+  0%, 100% { box-shadow: 0 0 5px rgba(0, 210, 255, 0.4); }
+  50% { box-shadow: 0 0 20px rgba(0, 210, 255, 0.6); }
+}
+
+.animate-pulse-blue {
+  animation: pulse-blue 2s infinite;
+}
