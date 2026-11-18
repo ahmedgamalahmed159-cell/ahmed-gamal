@@ -1,20 +1,44 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Ahmed Gamal - Portfolio
 
-# Run and deploy your AI Studio app
+Personal portfolio and services site for **Ahmed Gamal**, Data Engineering and Administrative Solutions Specialist based in Egypt.
 
-This contains everything you need to run your app locally.
+The site presents my services, an interactive ROI calculator for automation savings, and direct contact over WhatsApp or email.
 
-View your app in AI Studio: https://ai.studio/apps/f55894d4-1058-45c3-8ec7-a1a259fbf95d
+## Services
+
+- **Data Engineering & Dashboards** - data pipelines and interactive Power BI / Excel dashboards that turn raw data into clear decisions.
+- **Administrative Automation** - custom VBA scripts and MS Access solutions that remove repetitive manual work and cut human error.
+- **Digital Content Management** - end-to-end management of educational and business platforms: organizing, optimizing, and deploying digital assets.
+- **AI-Driven Workflows** - integrating Generative AI and automated media generation into business workflows to scale content production.
+
+## Features
+
+- Responsive single-page design with a bento-grid hero layout
+- Tabbed services explorer
+- Interactive ROI calculator (estimates hours saved per year through automation)
+- Floating WhatsApp contact and pre-filled inquiry messages
+
+## Tech Stack
+
+- React 19 + TypeScript
+- Vite 6
+- Tailwind CSS 4
+- Motion (Framer Motion) animations
+- Lucide icons
+- Express (server utilities)
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
+**Prerequisites:** Node.js
 
+```bash
+npm install
+npm run dev
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+The app runs on http://localhost:3000
+
+## Contact
+
+- WhatsApp: +20 110 137 7014
+- Email: ahmedgamalahmed159@gmail.com
