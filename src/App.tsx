@@ -110,6 +110,16 @@ const PROJECTS: Project[] = [
     linkLabel: 'View the listing'
   },
   {
+    title: 'Etalem Hub',
+    tag: 'Past project',
+    description: 'Managed digital content lifecycle for specialized English business resources.',
+  },
+  {
+    title: 'Master Scheduler',
+    tag: 'Past project',
+    description: 'Custom MS Access systems for complex academic organizational structures.',
+  },
+  {
     title: 'Automation ROI Calculator',
     tag: 'Interactive demo',
     description: 'The calculator below is a demonstration of the kind of interactive tools I build. Its estimate is illustrative, not a quote.',
@@ -517,7 +527,7 @@ export default function App() {
                         transition={{ delay: 0.2 }}
                         className="text-slate-300 text-lg max-w-lg mb-10 leading-relaxed"
                     >
-                        I build practical data, automation, and Arabic educational content workflows, and I show real, checkable work instead of promises.
+                        I build practical data, automation, and Arabic educational content workflows — and I show real, checkable work instead of promises.
                     </motion.p>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -543,7 +553,7 @@ export default function App() {
                     </div>
                     <div>
                         <h4 className="text-xl font-black mb-2 uppercase tracking-wide">Founder of Et3alem</h4>
-                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest leading-loose">My own Arabic learning platform for commerce students. Live at atallm.vercel.app.</p>
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest leading-loose">My own Arabic learning platform for commerce students — live at atallm.vercel.app.</p>
                     </div>
                 </div>
                 <div className="bento-card p-8 border-l-4 border-l-brand-blue flex flex-col justify-between overflow-hidden relative">
@@ -554,7 +564,7 @@ export default function App() {
                         <BadgeCheck size={24} />
                     </div>
                     <div>
-                        <h4 className="text-xl font-black mb-2 uppercase tracking-wide">AI Learning & Certifications</h4>
+                        <h4 className="text-xl font-black mb-2 uppercase tracking-wide">Certified AI Practitioner</h4>
                         <p className="text-xs text-slate-400 font-bold uppercase tracking-widest leading-loose">Google Gemini Certified Educator · Claude Academy ×2 · Intro to AI.</p>
                     </div>
                 </div>
@@ -574,7 +584,7 @@ export default function App() {
                         <span className="text-gradient">Real Things</span> People Use.
                     </h2>
                     <p className="text-lg text-slate-400 mb-10 leading-relaxed">
-                        I am a Commerce student (English Section, Assiut University) who builds in public: a live learning platform, published Arabic educational videos, a children's book on sale, and a small retail business I run day to day. I work with AI tools daily and review their output critically. That is my real workflow, not a slogan.
+                        I am a Commerce student (English Section, Assiut University) who builds in public: a live learning platform, published Arabic educational videos, a children's book on sale, and a small retail business I run day to day. I work with AI tools daily and review their output critically — that is my real workflow, not a slogan.
                     </p>
                     <div className="grid grid-cols-3 gap-6">
                         <div className="space-y-1">
@@ -601,7 +611,7 @@ export default function App() {
                             <h4 className="text-3xl font-black tracking-tighter">Et3alem (اتعلم)</h4>
                         </div>
                         <p className="text-slate-300 text-lg leading-relaxed">
-                            A learning platform for commerce students: video lectures, study materials, and academic terms, designed, built, and maintained by me.
+                            A learning platform for commerce students: video lectures, study materials, and academic terms — designed, built, and maintained by me.
                         </p>
                     </div>
                     <div className="mt-12 flex gap-2 flex-wrap items-center">
