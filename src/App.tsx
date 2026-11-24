@@ -5,22 +5,25 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Database, 
-  Cpu, 
-  Layers, 
-  Brain, 
-  Mail, 
-  MessageCircle, 
-  ArrowRight, 
-  Clock, 
+import {
+  Database,
+  Cpu,
+  Layers,
+  Brain,
+  Mail,
+  MessageCircle,
+  ArrowRight,
+  Clock,
   CheckCircle,
   Menu,
   X,
   Phone,
   BarChart3,
-  FileText,
-  Zap
+  Zap,
+  Youtube,
+  BookOpen,
+  BadgeCheck,
+  ExternalLink
 } from 'lucide-react';
 
 // --- Types ---
@@ -35,6 +38,14 @@ interface Service {
   cta: string;
 }
 
+interface Project {
+  title: string;
+  tag: string;
+  description: string;
+  link?: string;
+  linkLabel?: string;
+}
+
 // --- Data ---
 
 const SERVICES: Service[] = [
@@ -42,8 +53,8 @@ const SERVICES: Service[] = [
     id: 'data',
     title: 'Data Engineering & Dashboards',
     icon: Database,
-    description: 'Transforming raw data into actionable intelligence. I build robust pipelines and interactive PowerBI/Excel dashboards that provide real-time clarity and strategic advantages.',
-    benefits: ['Real-time reporting', 'ETL Pipeline Design', 'Structural Integrity', 'Custom Visualizations'],
+    description: 'Turning raw data into clear decisions: organized datasets, Excel/Power BI style dashboards, and reporting that a business can actually use.',
+    benefits: ['Data cleaning & structuring', 'Dashboard design', 'Recurring reports', 'Custom visualizations'],
     waMessage: 'I would like to request a custom Dashboard design.',
     cta: 'Request a Dashboard'
   },
@@ -51,29 +62,90 @@ const SERVICES: Service[] = [
     id: 'admin',
     title: 'Administrative Automation',
     icon: Cpu,
-    description: 'Custom VBA scripts and MS Access database solutions. I eliminate repetitive manual entry, reducing human error and saving hundreds of hours of team time.',
-    benefits: ['VBA Macro Development', 'Database Optimization', 'Workflow Automation', 'Error Reduction'],
+    description: 'Removing repetitive manual work with practical automation: spreadsheets, templates, and simple tools that cut errors and save hours.',
+    benefits: ['Workflow automation', 'Excel / VBA solutions', 'Document templates', 'Error reduction'],
     waMessage: 'I need help with custom Administrative Automation solutions.',
     cta: 'Start Automating'
   },
   {
     id: 'content',
-    title: 'Digital Content Management',
+    title: 'Educational Content Production',
     icon: Layers,
-    description: 'End-to-end lifecycle management for educational and business platforms. Ensuring your digital assets are organized, optimized, and deployed for maximum engagement.',
-    benefits: ['Platform Administration', 'Platform Content Architecture', 'Digital Asset Management', 'Deployment Strategy'],
-    waMessage: 'I am interested in Digital Content Management solutions.',
-    cta: 'Manage My Content'
+    description: 'End-to-end production of Arabic educational content: structured study materials, explainer videos with motion graphics and voiceover, and channel management.',
+    benefits: ['Study guides & revision PDFs', 'Explainer video production', 'Channel management', 'Curriculum structuring'],
+    waMessage: 'I am interested in educational content production.',
+    cta: 'Produce My Content'
   },
   {
     id: 'ai',
     title: 'AI-Driven Workflows',
     icon: Brain,
-    description: 'Leveraging Generative AI and automated media generation to accelerate content production. I integrate AI tools into your workflow to scale operations exponentially.',
-    benefits: ['Automated Transcription', 'AI Content Generation', 'Workflow Integration', 'Efficiency Scaling'],
+    description: 'Practical AI integration for real work: prompt design, AI-assisted research, content generation pipelines, and quality review of model output.',
+    benefits: ['Prompt design', 'AI content pipelines', 'Output quality review', 'Tool setup & training'],
     waMessage: 'I would like to explore AI-driven workflow solutions.',
     cta: 'Explore AI Options'
   }
+];
+
+const PROJECTS: Project[] = [
+  {
+    title: 'Et3alem (اتعلم) Learning Platform',
+    tag: 'Live product',
+    description: 'My own Arabic learning platform for commerce students: video lectures, study materials, and academic resources. Built with React, TypeScript, and Firebase using AI-assisted development.',
+    link: 'https://atallm.vercel.app',
+    linkLabel: 'Visit the live platform'
+  },
+  {
+    title: 'Et3alem YouTube Channels',
+    tag: 'Published content',
+    description: 'Arabic explainer videos with motion graphics and voiceover, written and produced by me: lecture explanations on @ahmedgamal-k9n and a tech/AI series on @Et3alem-i4v.',
+    link: 'https://www.youtube.com/@Et3alem-i4v',
+    linkLabel: 'Watch on YouTube'
+  },
+  {
+    title: 'Rahab Al-Bayan Children\'s Books',
+    tag: 'Published product',
+    description: 'An illustrated Arabic children\'s reading book (83 pages) that I designed and produced from lettering to print-ready PDF, listed for sale on Egyptian marketplaces. A second book is completed and pending publication.',
+    link: 'https://nafezly.com/service/108106',
+    linkLabel: 'View the listing'
+  },
+  {
+    title: 'Automation ROI Calculator',
+    tag: 'Interactive demo',
+    description: 'The calculator below is a demonstration of the kind of interactive tools I build. Its estimate is illustrative, not a quote.',
+  }
+];
+
+const CERTIFICATES = [
+  {
+    title: 'Gemini Certified Educator',
+    issuer: 'Google for Education',
+    detail: 'Issued Oct 2025 · valid through Oct 2028'
+  },
+  {
+    title: 'AI Fluency: Framework and Foundations',
+    issuer: 'Claude Academy (Anthropic)',
+    detail: 'Completed Oct 2026',
+    link: 'https://academy.claude.com/verify/b39c410378a45616b9b8d4ac6ea1764c'
+  },
+  {
+    title: 'AI Capabilities and Limitations',
+    issuer: 'Claude Academy (Anthropic)',
+    detail: 'Completed Oct 2026',
+    link: 'https://academy.claude.com/verify/d8700baa8c60e9cc6e6094d4ec6e7a81'
+  },
+  {
+    title: 'Introduction to AI',
+    issuer: 'Course by Ibrahim Sobh',
+    detail: 'Completed Oct 2026 · final quiz 12/12'
+  }
+];
+
+const SKILLS = [
+  'AI-assisted research', 'Prompt design', 'Arabic content review',
+  'Fact-checking', 'Excel & dashboards', 'Google Sheets',
+  'Educational content', 'Voiceover & video production',
+  'React / TypeScript (AI-assisted)', 'Firebase', 'GitHub', 'Vercel'
 ];
 
 // --- Components ---
@@ -91,7 +163,8 @@ const Navbar = () => {
   const navLinks = [
     { name: 'About', href: '#about' },
     { name: 'Services', href: '#services' },
-    { name: 'ROI Tool', href: '#calculator' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'ROI Demo', href: '#calculator' },
     { name: 'Contact', href: '#contact' },
   ];
 
@@ -105,16 +178,16 @@ const Navbar = () => {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => (
-            <a 
-              key={link.name} 
-              href={link.href} 
+            <a
+              key={link.name}
+              href={link.href}
               className="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-brand-blue transition-colors"
             >
               {link.name}
             </a>
           ))}
-          <a 
-            href="https://wa.me/201101377014" 
+          <a
+            href="https://wa.me/201101377014"
             className="btn-whatsapp px-6 py-2.5 rounded-xl text-sm font-bold active:scale-95 transition-all"
           >
             Work With Me
@@ -130,16 +203,16 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             className="md:hidden absolute top-full left-0 w-full bg-brand-bg border-b border-white/10 p-6 flex flex-col gap-6"
           >
             {navLinks.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href} 
+              <a
+                key={link.name}
+                href={link.href}
                 onClick={() => setIsOpen(false)}
                 className="text-lg font-bold text-slate-300 hover:text-brand-blue"
               >
@@ -162,8 +235,8 @@ const ServiceSection = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
             <div>
-               <h2 className="text-3xl md:text-5xl font-black mb-4 underline decoration-brand-blue underline-offset-8">Interactive Services</h2>
-               <p className="text-slate-400">Select a specialized solution to explore detailed capabilities.</p>
+               <h2 className="text-3xl md:text-5xl font-black mb-4 underline decoration-brand-blue underline-offset-8">What I Can Do For You</h2>
+               <p className="text-slate-400">Select a service to explore what is included.</p>
             </div>
         </div>
 
@@ -187,7 +260,7 @@ const ServiceSection = () => {
             ))}
           </div>
 
-          <motion.div 
+          <motion.div
             key={activeTab}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -201,7 +274,7 @@ const ServiceSection = () => {
             <p className="text-slate-300 text-lg mb-8 leading-relaxed">
               {activeService.description}
             </p>
-            
+
             <div className="grid sm:grid-cols-2 gap-4 mb-10">
               {activeService.benefits.map((benefit) => (
                 <div key={benefit} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
@@ -211,7 +284,7 @@ const ServiceSection = () => {
               ))}
             </div>
 
-            <a 
+            <a
               href={`https://wa.me/201101377014?text=${encodeURIComponent(activeService.waMessage)}`}
               className="btn-whatsapp w-full sm:w-fit px-10 py-5 rounded-2xl font-bold text-base flex items-center justify-center gap-3 active:scale-95 transition-all"
             >
@@ -223,6 +296,63 @@ const ServiceSection = () => {
     </section>
   );
 };
+
+const ProjectsSection = () => (
+  <section id="projects" className="py-24 bg-brand-bg">
+    <div className="container mx-auto px-6">
+      <div className="mb-16">
+        <h2 className="text-3xl md:text-5xl font-black mb-4 underline decoration-brand-blue underline-offset-8">Real Work, Not Claims</h2>
+        <p className="text-slate-400 max-w-2xl">Everything below is live and checkable. Demo material is labeled as demo.</p>
+      </div>
+      <div className="grid md:grid-cols-2 gap-6">
+        {PROJECTS.map((p) => (
+          <div key={p.title} className="bento-card p-8 md:p-10 flex flex-col justify-between group">
+            <div>
+              <div className="bg-brand-blue/10 text-brand-blue text-[10px] font-bold uppercase tracking-widest py-1 px-3 rounded-full w-fit mb-6">{p.tag}</div>
+              <h3 className="text-2xl font-black mb-4 tracking-tight">{p.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed mb-8">{p.description}</p>
+            </div>
+            {p.link && (
+              <a href={p.link} target="_blank" rel="noopener noreferrer" className="btn-glass w-fit px-6 py-3 rounded-xl text-xs font-bold flex items-center gap-2 active:scale-95 transition-all">
+                {p.linkLabel} <ExternalLink size={14} />
+              </a>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+const CertificatesSection = () => (
+  <section id="certificates" className="py-24 bg-brand-bg">
+    <div className="container mx-auto px-6">
+      <div className="mb-16">
+        <h2 className="text-3xl md:text-5xl font-black mb-4 underline decoration-brand-blue underline-offset-8">Certifications</h2>
+        <p className="text-slate-400">Verified where a verification link exists.</p>
+      </div>
+      <div className="grid md:grid-cols-2 gap-6">
+        {CERTIFICATES.map((c) => (
+          <div key={c.title} className="bento-card p-8 flex items-start gap-5">
+            <div className="w-12 h-12 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue shrink-0">
+              <BadgeCheck size={24} />
+            </div>
+            <div>
+              <h3 className="text-lg font-black mb-1">{c.title}</h3>
+              <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-2">{c.issuer}</p>
+              <p className="text-xs text-slate-500">{c.detail}</p>
+              {c.link && (
+                <a href={c.link} target="_blank" rel="noopener noreferrer" className="text-xs text-brand-blue font-bold mt-2 inline-flex items-center gap-1 hover:underline">
+                  Verify online <ExternalLink size={12} />
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
 
 const Calculator = () => {
   const [hours, setHours] = useState<number>(0);
@@ -248,14 +378,15 @@ const Calculator = () => {
                         </div>
                         <h2 className="text-2xl font-bold uppercase tracking-tight">Automation ROI Calculator</h2>
                     </div>
-                    <p className="text-slate-400 text-lg mb-8">Measure the tangible impact of custom workflow engineering on your business operations.</p>
+                    <p className="text-slate-400 text-lg mb-4">A demo of the interactive tools I build. The estimate is illustrative, not a quote.</p>
+                    <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Demo project</p>
                 </div>
 
                 <div className="md:w-1/2 w-full space-y-6">
                     <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
                         <label className="text-[10px] uppercase font-black tracking-widest text-slate-500 block mb-4">Weekly Hours Lost to Manual Tasks</label>
-                        <input 
-                            type="number" 
+                        <input
+                            type="number"
                             min="0"
                             placeholder="0"
                             onChange={(e) => calculate(Number(e.target.value))}
@@ -265,7 +396,7 @@ const Calculator = () => {
 
                     <AnimatePresence>
                         {savings > 0 && (
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 className="p-6 bg-brand-blue/10 rounded-2xl border border-brand-blue/30"
@@ -279,7 +410,7 @@ const Calculator = () => {
                         )}
                     </AnimatePresence>
 
-                    <a 
+                    <a
                         href={`https://wa.me/201101377014?text=${encodeURIComponent(`I ran your ROI calculator. I am currently spending ${hours} hours/week on manual tasks and want to reclaim ${savings} hours/year through automation.`)}`}
                         className="w-full py-5 rounded-2xl bg-white text-black font-black text-center block hover:bg-brand-blue transition-all active:scale-95 shadow-xl shadow-brand-blue/5 shadow-white/5"
                     >
@@ -300,43 +431,35 @@ const Contact = () => {
                     <div className="md:col-span-7 bento-card p-10 flex flex-col justify-center">
                         <div className="bg-brand-blue/10 text-brand-blue text-[10px] font-bold uppercase tracking-widest py-1 px-3 rounded-full w-fit mb-6">Get in Touch</div>
                         <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight">
-                            Build the <span className="text-gradient">Next Generation</span> of Your Operations.
+                            Let's Build Something <span className="text-gradient">That Actually Ships.</span>
                         </h2>
                         <p className="text-lg text-slate-400 mb-10">
-                            Ready to transform complexity into competitive advantage? Let's discuss your custom data or automation requirements.
+                            Tell me about your data, content, or automation problem and I will reply with a concrete plan.
                         </p>
-                        
+
                         <div className="flex flex-wrap gap-4">
                             <a href="mailto:ahmedgamalahmed159@gmail.com" className="btn-glass px-6 py-4 rounded-2xl text-sm font-bold flex items-center gap-3 active:scale-95 transition-all">
                                 <Mail size={18} className="text-brand-blue" /> Email Direct
                             </a>
-                            <a href="tel:01101377014" className="btn-glass px-6 py-4 rounded-2xl text-sm font-bold flex items-center gap-3 active:scale-95 transition-all">
-                                <Phone size={18} className="text-brand-blue" /> Call Specialist
+                            <a href="tel:+201101377014" className="btn-glass px-6 py-4 rounded-2xl text-sm font-bold flex items-center gap-3 active:scale-95 transition-all">
+                                <Phone size={18} className="text-brand-blue" /> Call Me
                             </a>
                         </div>
                     </div>
 
                     <div className="md:col-span-5 bento-card p-8 md:p-10">
                         <h4 className="text-lg font-bold mb-8 flex items-center gap-2">
-                           <span className="w-2 h-2 rounded-full bg-brand-blue"></span> Send a Quick Request
+                           <span className="w-2 h-2 rounded-full bg-brand-blue"></span> Fastest Reply
                         </h4>
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Name</label>
-                                <input type="text" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 focus:border-brand-blue outline-none text-sm transition-all" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Email</label>
-                                <input type="email" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 focus:border-brand-blue outline-none text-sm transition-all" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Message</label>
-                                <textarea rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl p-4 focus:border-brand-blue outline-none text-sm transition-all"></textarea>
-                            </div>
-                            <button className="w-full py-4 bg-white text-brand-bg font-black rounded-xl hover:bg-brand-blue hover:text-white active:scale-95 transition-all text-sm uppercase tracking-widest">
-                                Dispatch Message
-                            </button>
-                        </div>
+                        <p className="text-sm text-slate-400 leading-relaxed mb-8">
+                            WhatsApp is the fastest way to reach me. Send a message with what you need and I will get back to you the same day.
+                        </p>
+                        <a
+                            href="https://wa.me/201101377014?text=Hello%20Ahmed,%20I%20saw%20your%20portfolio%20and%20I%20would%20like%20to%20discuss%20a%20project"
+                            className="btn-whatsapp w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-3 active:scale-95 transition-all"
+                        >
+                            <MessageCircle size={18} /> Message on WhatsApp
+                        </a>
                     </div>
                 </div>
             </div>
@@ -345,9 +468,9 @@ const Contact = () => {
 }
 
 const FloatingWhatsApp = () => (
-    <a 
-        href="https://wa.me/201101377014" 
-        target="_blank" 
+    <a
+        href="https://wa.me/201101377014"
+        target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-8 right-8 z-[100] w-14 h-14 btn-whatsapp rounded-full flex items-center justify-center shadow-2xl border-4 border-brand-bg transition-all hover:scale-110 active:scale-90"
     >
@@ -359,28 +482,28 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <Navbar />
-      
+
       {/* Hero Section styled as Large Bento Card */}
       <header className="pt-32 pb-12">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-12 gap-6 min-h-[600px]">
             {/* Main Hero Bento Card */}
             <div className="lg:col-span-8 bento-card relative overflow-hidden group min-h-[500px]">
-                <img 
-                  src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=2070" 
-                  alt="Technology Background" 
+                <img
+                  src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=2070"
+                  alt="Technology Background"
                   className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-brand-bg via-transparent to-transparent"></div>
                 <div className="relative z-10 p-10 h-full flex flex-col justify-end">
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-brand-blue text-black text-[10px] font-black uppercase tracking-[0.2em] py-1.5 px-4 rounded-full w-fit mb-6"
                     >
-                        Expert Data & Content Specialist
+                        Data & AI Content Specialist · Egypt
                     </motion.div>
-                    <motion.h1 
+                    <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
@@ -388,15 +511,15 @@ export default function App() {
                     >
                         AHMED <span className="text-gradient">GAMAL</span>
                     </motion.h1>
-                    <motion.p 
+                    <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
                         className="text-slate-300 text-lg max-w-lg mb-10 leading-relaxed"
                     >
-                        Architecting high-scale administrative solutions and data engineering pipelines that turn complexity into competitive advantage.
+                        I build practical data, automation, and Arabic educational content workflows, and I show real, checkable work instead of promises.
                     </motion.p>
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
@@ -405,8 +528,8 @@ export default function App() {
                         <a href="https://wa.me/201101377014?text=Hello%20Ahmed,%20I%20would%20like%20to%20work%20with%20you" className="btn-whatsapp px-8 py-4 rounded-2xl font-bold text-sm flex items-center gap-3">
                             <MessageCircle size={20} /> Chat on WhatsApp
                         </a>
-                        <a href="mailto:ahmedgamalahmed159@gmail.com" className="btn-glass px-8 py-4 rounded-2xl font-bold text-sm flex items-center gap-3">
-                            <Mail size={18} /> Email Direct
+                        <a href="#projects" className="btn-glass px-8 py-4 rounded-2xl font-bold text-sm flex items-center gap-3">
+                            <Zap size={18} /> See Real Work
                         </a>
                     </motion.div>
                 </div>
@@ -419,8 +542,8 @@ export default function App() {
                         <Brain size={24} />
                     </div>
                     <div>
-                        <h4 className="text-xl font-black mb-2 uppercase tracking-wide">Founder Mindset</h4>
-                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest leading-loose">Director of content architecture for market-leading platforms.</p>
+                        <h4 className="text-xl font-black mb-2 uppercase tracking-wide">Founder of Et3alem</h4>
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest leading-loose">My own Arabic learning platform for commerce students. Live at atallm.vercel.app.</p>
                     </div>
                 </div>
                 <div className="bento-card p-8 border-l-4 border-l-brand-blue flex flex-col justify-between overflow-hidden relative">
@@ -428,11 +551,11 @@ export default function App() {
                         <Database size={160} />
                     </div>
                     <div className="w-12 h-12 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue">
-                        <Zap size={24} fill="currentColor" />
+                        <BadgeCheck size={24} />
                     </div>
                     <div>
-                        <h4 className="text-xl font-black mb-2 uppercase tracking-wide">Data Engineering</h4>
-                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest leading-loose">ETL Pipelines • PowerBI • Custom VBA Architectures.</p>
+                        <h4 className="text-xl font-black mb-2 uppercase tracking-wide">Certified AI Practitioner</h4>
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest leading-loose">Google Gemini Certified Educator · Claude Academy ×2 · Intro to AI.</p>
                     </div>
                 </div>
             </div>
@@ -447,21 +570,24 @@ export default function App() {
                 {/* About Content Card */}
                 <div className="lg:col-span-7 bento-card p-10 md:p-16">
                     <h2 className="text-2xl md:text-4xl font-extrabold leading-tight mb-8">
-                        Bridging the Gap Between <br/>
-                        <span className="text-gradient">Data Systems</span> and <br/>
-                        Strategic Marketing.
+                        A Builder Who Ships <br/>
+                        <span className="text-gradient">Real Things</span> People Use.
                     </h2>
                     <p className="text-lg text-slate-400 mb-10 leading-relaxed">
-                        I am a highly motivated Commerce student (English Section) with a proven track record in building administrative solutions and engineering data pipelines. My founder experience ensures that I don't just build technical tools—I build products that scale.
+                        I am a Commerce student (English Section, Assiut University) who builds in public: a live learning platform, published Arabic educational videos, a children's book on sale, and a small retail business I run day to day. I work with AI tools daily and review their output critically. That is my real workflow, not a slogan.
                     </p>
-                    <div className="grid grid-cols-2 gap-10">
+                    <div className="grid grid-cols-3 gap-6">
                         <div className="space-y-1">
-                            <div className="text-5xl font-black text-white">70<span className="text-brand-blue">%</span></div>
-                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Efficiency Gain</div>
+                            <div className="text-4xl font-black text-white">10<span className="text-brand-blue">+</span></div>
+                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Published videos</div>
                         </div>
                         <div className="space-y-1">
-                            <div className="text-5xl font-black text-white">500<span className="text-brand-blue">+</span></div>
-                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Hours Saved/Yr</div>
+                            <div className="text-4xl font-black text-white">4</div>
+                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">AI certificates</div>
+                        </div>
+                        <div className="space-y-1">
+                            <div className="text-4xl font-black text-white">2</div>
+                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Books produced</div>
                         </div>
                     </div>
                 </div>
@@ -469,19 +595,22 @@ export default function App() {
                 {/* Platform Card */}
                 <div className="lg:col-span-5 bento-card p-10 bg-linear-to-br from-[#0d9488]/20 to-transparent flex flex-col justify-between">
                     <div>
-                        <h3 className="text-xs font-black text-[#0d9488] uppercase tracking-[0.3em] mb-6 border-b border-[#0d9488]/20 pb-4 inline-block w-full">Featured Ecosystem</h3>
+                        <h3 className="text-xs font-black text-[#0d9488] uppercase tracking-[0.3em] mb-6 border-b border-[#0d9488]/20 pb-4 inline-block w-full">Featured Project</h3>
                         <div className="flex items-center gap-6 mb-8">
                             <div className="w-16 h-16 rounded-3xl bg-[#0d9488] flex items-center justify-center font-black text-3xl shadow-lg shadow-[#0d9488]/30">ت</div>
-                            <h4 className="text-3xl font-black tracking-tighter">Etalem (اتعلم)</h4>
+                            <h4 className="text-3xl font-black tracking-tighter">Et3alem (اتعلم)</h4>
                         </div>
                         <p className="text-slate-300 text-lg leading-relaxed">
-                            Full-lifecycle content architecture for a leading e-learning platform catering to university commerce students.
+                            A learning platform for commerce students: video lectures, study materials, and academic terms, designed, built, and maintained by me.
                         </p>
                     </div>
-                    <div className="mt-12 flex gap-2 flex-wrap">
-                        {['Architecture', 'Content Strategy', 'Automation'].map(t => (
+                    <div className="mt-12 flex gap-2 flex-wrap items-center">
+                        {['React', 'TypeScript', 'Firebase', 'AI-assisted build'].map(t => (
                             <span key={t} className="px-3 py-1 bg-[#0d9488]/10 rounded-full text-[10px] font-black text-[#0d9488] uppercase tracking-wider">{t}</span>
                         ))}
+                        <a href="https://atallm.vercel.app" target="_blank" rel="noopener noreferrer" className="px-3 py-1 bg-[#0d9488] rounded-full text-[10px] font-black text-black uppercase tracking-wider inline-flex items-center gap-1">
+                            Visit <ExternalLink size={10} />
+                        </a>
                     </div>
                 </div>
             </div>
@@ -489,51 +618,26 @@ export default function App() {
       </section>
 
       <ServiceSection />
-      
-      {/* Knowledge Base Bento */}
+
+      <ProjectsSection />
+
+      {/* Skills Bento */}
       <section className="py-24 bg-brand-bg relative overflow-hidden">
         <div className="container mx-auto px-6">
-            <div className="grid lg:grid-cols-12 gap-6">
-                {/* Domain Knowledge */}
-                <div className="lg:col-span-4 bento-card p-10">
-                    <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] mb-8 border-b border-white/5 pb-4">Knowledge Base</h3>
-                    <div className="flex flex-wrap gap-2">
-                        {[
-                            'VBA/Access', 'Google Cloud', 'Netlify', 
-                            'Netlify', 'AI Prompting', 'Data Pipelines',
-                            'Excel Dashboards', 'Marketing Psych'
-                        ].map((skill) => (
-                            <div key={skill} className="px-4 py-2 bg-white/5 bento-card rounded-xl font-bold text-[10px] uppercase tracking-wider border-none">
-                                {skill}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Highlight Projects in Bento Style */}
-                <div className="lg:col-span-8 grid md:grid-cols-2 gap-6">
-                    <div className="bento-card p-10 group relative flex flex-col justify-center border-l-4 border-l-brand-blue">
-                         <div className="absolute top-0 right-0 p-6 text-brand-blue opacity-5 group-hover:scale-110 transition-transform">
-                            <BarChart3 size={100} />
+            <div className="bento-card p-10">
+                <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] mb-8 border-b border-white/5 pb-4">Tools & Skills I Actually Use</h3>
+                <div className="flex flex-wrap gap-2">
+                    {SKILLS.map((skill) => (
+                        <div key={skill} className="px-4 py-2 bg-white/5 bento-card rounded-xl font-bold text-[10px] uppercase tracking-wider border-none">
+                            {skill}
                         </div>
-                        <div className="relative z-10">
-                            <h3 className="text-3xl font-black mb-4 uppercase tracking-tighter">Etalem Hub</h3>
-                            <p className="text-sm text-slate-400 leading-relaxed">Managed digital content lifecycle for specialized English business resources.</p>
-                        </div>
-                    </div>
-                    <div className="bento-card p-10 group relative flex flex-col justify-center border-l-4 border-l-brand-purple">
-                         <div className="absolute top-0 right-0 p-6 text-brand-purple opacity-5 group-hover:scale-110 transition-transform">
-                            <Cpu size={100} />
-                        </div>
-                        <div className="relative z-10">
-                            <h3 className="text-3xl font-black mb-4 uppercase tracking-tighter">Master Scheduler</h3>
-                            <p className="text-sm text-slate-400 leading-relaxed">Custom MS Access systems for complex academic organizational structures.</p>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </div>
       </section>
+
+      <CertificatesSection />
 
       <Calculator />
 
@@ -542,10 +646,10 @@ export default function App() {
       <footer className="py-12 bg-black border-t border-white/10">
         <div className="container mx-auto px-6 text-center">
             <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em] mb-4">
-                AHMED GAMAL • Administrative Solutions • Data Engineering
+                AHMED GAMAL • DATA & AI CONTENT • EDUCATIONAL MEDIA
             </p>
             <p className="text-[10px] text-slate-600 font-bold">
-                &copy; {new Date().getFullYear()} Precision Systems. All Rights Reserved.
+                &copy; {new Date().getFullYear()} Ahmed Gamal. All Rights Reserved.
             </p>
         </div>
       </footer>
