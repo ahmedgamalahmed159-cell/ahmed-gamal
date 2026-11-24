@@ -554,7 +554,7 @@ export default function App() {
                         <BadgeCheck size={24} />
                     </div>
                     <div>
-                        <h4 className="text-xl font-black mb-2 uppercase tracking-wide">Certified AI Practitioner</h4>
+                        <h4 className="text-xl font-black mb-2 uppercase tracking-wide">AI Learning & Certifications</h4>
                         <p className="text-xs text-slate-400 font-bold uppercase tracking-widest leading-loose">Google Gemini Certified Educator · Claude Academy ×2 · Intro to AI.</p>
                     </div>
                 </div>
