@@ -130,7 +130,7 @@ const PROJECTS: Project[] = [
     bullets: [
       'Highlighting skills and strengths clearly and elegantly.',
       'Clean, eye-friendly structural formatting for easy reading.',
-      'Using keywords that ensure passing automated screening.'
+      'Using relevant keywords for the target role to improve automated screening (ATS) compatibility.'
     ]
   },
   {
