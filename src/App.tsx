@@ -676,7 +676,7 @@ export default function App() {
                     <p className="text-lg text-slate-400 mb-10 leading-relaxed">
                         I am a Commerce student (English Section, Assiut University) who builds in public: a live learning platform, published Arabic educational videos, a children's book on sale, and a small village grocery shop I run. I use AI tools such as ChatGPT and Gemini in my work.
                     </p>
-                    <div className="grid grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                         <div className="space-y-1">
                             <div className="text-4xl font-black text-white">10<span className="text-brand-blue">+</span></div>
                             <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Published videos</div>
