@@ -44,6 +44,8 @@ interface Project {
   description: string;
   link?: string;
   linkLabel?: string;
+  image?: string;
+  bullets?: string[];
 }
 
 // --- Data ---
@@ -110,14 +112,121 @@ const PROJECTS: Project[] = [
     linkLabel: 'View the listing'
   },
   {
-    title: 'Etalem Hub',
-    tag: 'Past project',
-    description: 'Managed digital content lifecycle for specialized English business resources.',
+    title: 'Et3alem Platform UI Design (اتعلم)',
+    tag: 'Recovered portfolio project',
+    description: 'Design and development of the platform interface.',
+    image: '/images/projects/p1.jpg',
+    bullets: [
+      'Professional UI design for the Et3alem platform.',
+      'Organizing and categorizing sections to make access easy for students.',
+      'Responsive code that works excellently on mobile screens.'
+    ]
   },
   {
-    title: 'Master Scheduler',
-    tag: 'Past project',
-    description: 'Custom MS Access systems for complex academic organizational structures.',
+    title: 'CV Design (تصميم سيرة ذاتية)',
+    tag: 'Recovered portfolio project',
+    description: 'CV structuring compatible with hiring systems (ATS). Shown sample is anonymized.',
+    image: '/images/projects/p2.jpg',
+    bullets: [
+      'Highlighting skills and strengths clearly and elegantly.',
+      'Clean, eye-friendly structural formatting for easy reading.',
+      'Using keywords that ensure passing automated screening.'
+    ]
+  },
+  {
+    title: 'Database Project (مشروع قاعدة البيانات)',
+    tag: 'Recovered portfolio project',
+    description: 'An integrated system for storing and analyzing data.',
+    image: '/images/projects/p3.jpg',
+    bullets: [
+      'Building integrated, precisely interrelated databases.',
+      'Designing query interfaces to make report extraction easy.',
+      'Organizing information to save time and effort.'
+    ]
+  },
+  {
+    title: 'Sales and Profitability Analysis - Excel (تحليل مبيعات وربحية)',
+    tag: 'Recovered portfolio project',
+    description: 'Data analysis and report generation.',
+    image: '/images/projects/p4.jpg',
+    bullets: [
+      'Preparing data analysis to extract periodic reports.',
+      'Calculating profitability and sales ratios with high accuracy.',
+      'Preparing statistical tables and formulas for easy reading.'
+    ]
+  },
+  {
+    title: 'Study Notes Typesetting (إخراج وتنسيق المذكرات)',
+    tag: 'Recovered portfolio project',
+    description: 'Design of study booklets and academic books.',
+    image: '/images/projects/p5.jpg',
+    bullets: [
+      'Formatting paragraphs and text in a way that makes studying inviting.',
+      'Organizing indexes and headings methodically for easy access.',
+      'Complete professional typesetting that raises the quality of the academic content.'
+    ]
+  },
+  {
+    title: 'Educational Visual Content (المحتوى البصري التعليمي)',
+    tag: 'Recovered portfolio project',
+    description: 'Designs and infographics for curricula.',
+    image: '/images/projects/p6.jpg',
+    bullets: [
+      'Summarizing full chapters into focused points.',
+      'Focusing on key exam terminology.',
+      'Designing content in Ahmed Gamal signature style.'
+    ]
+  },
+  {
+    title: 'Mind Map Design (تصميم الخرائط الذهنية)',
+    tag: 'Recovered portfolio project',
+    description: 'Simplifying curricula through visual maps.',
+    image: '/images/projects/p7.jpg',
+    bullets: [
+      'Turning complex texts into interconnected mind maps.',
+      'Using colors and shapes to strengthen visual memory.',
+      'Summarizing curricula to make final revision easier.'
+    ]
+  },
+  {
+    title: 'Comparison Tables (إعداد جداول المقارنات)',
+    tag: 'Recovered portfolio project',
+    description: 'Organizing academic data clearly.',
+    image: '/images/projects/p8.jpg',
+    bullets: [
+      'Designing tables that simplify differences and concepts.',
+      'Formatting page margins and highlighting headings.',
+      'Organizing dense text professionally.'
+    ]
+  },
+  {
+    title: 'Final Revision Files (ملفات المراجعات النهائية)',
+    tag: 'Recovered portfolio project',
+    description: 'Design of worksheets and exam templates.',
+    image: '/images/projects/p9.jpg',
+    bullets: [
+      'Organized formatting of exam questions.',
+      'Comfortable spaces for model answers.',
+      'Page typesetting that reflects precise work.'
+    ]
+  },
+  {
+    title: 'Report Formatting (تنسيق وإعداد التقارير)',
+    tag: 'Recovered portfolio project',
+    description: 'Typesetting official and academic reports. Shown sample has student identifiers removed.',
+    image: '/images/projects/p10.jpg',
+    bullets: [
+      'Preparing professional reports that reflect accurate, professional work.',
+      'Formatting margins and fonts to official standards.',
+      'Presenting results and recommendations clearly and convincingly.'
+    ]
+  },
+  {
+    title: 'Original Arabic Portfolio (Netlify)',
+    tag: 'Recovered artifact',
+    description: 'My original Arabic portfolio site, preserved as a recovered deployed artifact from its Netlify deployment. It is the deployed build, not the original source files. Third-party personal details in its images have been hidden.',
+    link: '/old-portfolio/',
+    linkLabel: 'View the preserved artifact'
   },
   {
     title: 'Automation ROI Calculator',
@@ -318,9 +427,17 @@ const ProjectsSection = () => (
         {PROJECTS.map((p) => (
           <div key={p.title} className="bento-card p-8 md:p-10 flex flex-col justify-between group">
             <div>
+              {p.image && (
+                <img src={p.image} alt={p.title} loading="lazy" className="rounded-2xl mb-6 w-full object-cover max-h-72 border border-white/10" />
+              )}
               <div className="bg-brand-blue/10 text-brand-blue text-[10px] font-bold uppercase tracking-widest py-1 px-3 rounded-full w-fit mb-6">{p.tag}</div>
               <h3 className="text-2xl font-black mb-4 tracking-tight">{p.title}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed mb-8">{p.description}</p>
+              <p className="text-slate-400 text-sm leading-relaxed mb-4">{p.description}</p>
+              {p.bullets && (
+                <ul className="list-disc list-inside text-slate-400 text-sm leading-relaxed mb-8 space-y-1">
+                  {p.bullets.map((b) => (<li key={b}>{b}</li>))}
+                </ul>
+              )}
             </div>
             {p.link && (
               <a href={p.link} target="_blank" rel="noopener noreferrer" className="btn-glass w-fit px-6 py-3 rounded-xl text-xs font-bold flex items-center gap-2 active:scale-95 transition-all">
