@@ -197,7 +197,7 @@ const PROJECTS: Project[] = [
   {
     title: 'Earlier Arabic Portfolio',
     tag: 'Earlier work',
-    description: 'My earlier Arabic portfolio site. Other people's personal details in its images have been hidden.',
+    description: 'My earlier Arabic portfolio site. Personal details of other people in its images have been hidden.',
     link: '/old-portfolio/',
     linkLabel: 'View the earlier portfolio'
   },
