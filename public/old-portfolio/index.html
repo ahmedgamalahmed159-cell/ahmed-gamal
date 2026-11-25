@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=09979eb6-f348-42cd-89ff-c46e6ae9e3f8
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ahmed Gamal | EdTech Innovator & AI Content Strategist</title>
+
+  <!-- ── ELITE TYPOGRAPHY: Outfit (EN) + Alexandria (AR) + Space Grotesk (mono) ── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Alexandria:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- ── THREE.JS r134 ── -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+  <style>
+  /* ═══════════════════════════════════════════════════
+     DESIGN TOKENS
+  ═══════════════════════════════════════════════════ */
+  :root {
+    --void:        #030008;
+    --deep:        #07000f;
+    --violet:      #8b5cf6;
+    --violet-soft: rgba(139,92,246,0.15);
+    --fuchsia:     #d946ef;
+    --cyan:        #22d3ee;
+    --gold:        #fbbf24;
+
+    --txt-hi:      #f0eaff;
+    --txt-mid:     #9b87c4;
+    --txt-lo:      #3a2d60;
+
+    --border-lo:   rgba(255,255,255,0.04);
+    --border-mid:  rgba(139,92,246,0.22);
+    --border-hi:   rgba(139,92,246,0.55);
+
+    /* glass: desktop has blur, mobile gets solid */
+    --glass-bg:    rgba(9,2,22,0.78);
+    --glass-solid: rgba(9,2,22,0.96);
+
+    --font-en:  'Outfit', sans-serif;
+    --font-ar:  'Alexandria', sans-serif;
+    --font-mono:'Space Grotesk', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { height: 100%; font-size: 16px; }
+
+  body {
+    font-family: var(--font-ar);
+    background: var(--void);
+    color: var(--txt-hi);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    /* ── SCROLL ARCHITECTURE ──
+       This body is the only scroll container.
+       600 vh gives the camera room to travel through 4 sections.
+       Each section occupies 150 vh of scroll range.
+    */
+    min-height: 600vh;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+    opacity: 0.45; pointer-events: none; z-index: 9000;
+    mix-blend-mode: overlay; will-change: transform;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: var(--void); }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--violet), var(--fuchsia)); border-radius: 2px; }
+
+  /* ═══════════════════════════════════════════════════
+     LOADING SCREEN
+     Hides the page while Three.js compiles.
+     Fades out the moment the scene is ready.
+  ═══════════════════════════════════════════════════ */
+  #loader {
+    position: fixed; inset: 0; z-index: 99999;
+    background: var(--void);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px;
+    transition: opacity 0.6s ease, visibility 0.6s;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-name {
+    font-family: var(--font-en);
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: #fff;
+  }
+  .loader-name span { color: var(--violet); }
+  .loader-bar-wrap {
+    width: 200px; height: 2px;
+    background: rgba(139,92,246,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .loader-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--violet), var(--fuchsia));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .loader-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--txt-lo);
+    text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════════════════════════
+     THREE.JS CANVAS — fixed, full viewport, z=0
+  ═══════════════════════════════════════════════════ */
+  #world-canvas {
+    position: fixed; inset: 0;
+    width: 100%; height: 100%;
+    z-index: 0; pointer-events: none;
+    will-change: transform; contain: strict;
+  }
+
+  /* ═══════════════════════════════════════════════════
+     NAVIGATION
+  ═══════════════════════════════════════════════════ */
+  #navbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 9999;
+    display: flex; align-items: center;
+    justify-content: space-between;
+    padding: 20px 52px;
+    background: rgba(3,0,8,0.5);
+    border-bottom: 1px solid var(--border-lo);
+    transition: padding 0.35s ease, background 0.35s ease, border-color 0.35s ease;
+    will-change: padding;
+  }
+  /* Desktop: glass blur */
+  @media (min-width: 769px) {
+    #navbar { backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); }
+  }
+  /* Mobile: solid (no blur over WebGL) */
+  @media (max-width: 768px) {
+    #navbar { background: var(--glass-solid); padding: 14px 22px; }
+  }
+  #navbar.scrolled {
+    padding: 12px 52px;
+    background: rgba(3,0,8,0.92);
+    border-bottom-color: var(--border-mid);
+  }
+  @media (max-width: 768px) {
+    #navbar.scrolled { padding: 10px 22px; }
+  }
+
+  .nav-logo {
+    font-family: var(--font-en);
+    font-weight: 800; font-size: 15px;
+    color: #fff; display: flex; align-items: center; gap: 10px;
+    letter-spacing: 0.5px;
+  }
+  .nav-logo-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--violet);
+    box-shadow: 0 0 10px var(--violet);
+    animation: pulse-dot 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%,100% { box-shadow: 0 0 6px var(--violet); transform: scale(1); }
+    50%      { box-shadow: 0 0 18px var(--fuchsia); transform: scale(1.3); }
+  }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    color: var(--txt-mid); text-decoration: none;
+    font-family: var(--font-ar);
+    font-size: 13.5px; font-weight: 600;
+    transition: color 0.25s; position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute;
+    bottom: -3px; right: 0; width: 0; height: 1px;
+    background: linear-gradient(90deg, var(--fuchsia), var(--violet));
+    transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  .nav-links a:hover { color: var(--txt-hi); }
+  .nav-links a:hover::after { width: 100%; }
+  @media (max-width: 640px) { .nav-links { display: none; } }
+
+  /* ═══════════════════════════════════════════════════
+     SCROLL PANEL SYSTEM
+     ── THE KEY FIX: Explicit, non-overlapping windows ──
+
+     Each panel occupies its own dedicated scroll range.
+     SEC_BOUNDS in JS drives opacity: 0→1→0.
+     Sections NEVER share opacity > 0 simultaneously.
+     Cross-fade gap is exactly 6% scroll range on each edge.
+
+     Layout: position:fixed, inset:0.
+     Content inside uses overflow-y:auto for tall sections.
+  ═══════════════════════════════════════════════════ */
+  .sp {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 88px 52px 60px;
+    /* Start invisible */
+    opacity: 0; pointer-events: none;
+    /* Only opacity animates — compositor-only, zero layout cost */
+    transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1);
+    z-index: 200;
+  }
+  .sp.vis {
+    opacity: 1; pointer-events: all;
+  }
+
+  /* Scrollable inner for panels with overflow content */
+  .sp-scroll {
+    width: 100%; height: 100%;
+    overflow-y: auto; overflow-x: hidden;
+    /* Custom thin scrollbar inside panels */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(139,92,246,0.3) transparent;
+    display: flex; flex-direction: column;
+    align-items: center; padding-top: 20px;
+  }
+  .sp-scroll::-webkit-scrollbar { width: 2px; }
+  .sp-scroll::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.3); }
+
+  /* ── Max-width inner container ── */
+  .inner { max-width: 1280px; width: 100%; }
+
+  @media (max-width: 640px) {
+    .sp { padding: 80px 18px 70px; }
+  }
+
+  /* ═══════════════════════════════════════════════════
+     PROGRESS RAIL
+  ═══════════════════════════════════════════════════ */
+  .progress-rail {
+    position: fixed; right: 22px; top: 50%;
+    transform: translateY(-50%);
+    z-index: 9999;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 11px;
+    pointer-events: none;
+  }
+  .pd {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--txt-lo);
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+  .pd.on {
+    background: var(--violet);
+    box-shadow: 0 0 10px var(--violet);
+    transform: scale(1.6);
+  }
+  @media (max-width: 640px) { .progress-rail { display: none; } }
+
+  /* ═══════════════════════════════════════════════════
+     WORLD AMBIENT LABEL (between sections)
+  ═══════════════════════════════════════════════════ */
+  .world-label {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 50; pointer-events: none;
+    opacity: 0; transition: opacity 0.7s ease;
+  }
+  .world-label.vis { opacity: 1; }
+  .world-label-text {
+    font-family: var(--font-en);
+    font-size: clamp(44px,9vw,120px);
+    font-weight: 900; letter-spacing: -3px;
+    background: linear-gradient(120deg, rgba(139,92,246,0.13), rgba(217,70,239,0.09));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; line-height: 1; user-select: none;
+  }
+
+  /* ═══════════════════════════════════════════════════
+     FADE-UP UTILITY
+  ═══════════════════════════════════════════════════ */
+  .fu {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1),
+                transform  0.7s cubic-bezier(0.4,0,0.2,1);
+    will-change: opacity, transform;
+  }
+  .sp.vis .fu { opacity: 1; transform: translateY(0); }
+  .fu-d1 { transition-delay: 80ms; }
+  .fu-d2 { transition-delay: 170ms; }
+  .fu-d3 { transition-delay: 260ms; }
+  .fu-d4 { transition-delay: 350ms; }
+  .fu-d5 { transition-delay: 440ms; }
+
+  /* ═══════════════════════════════════════════════════
+     SCROLL INDICATOR
+  ═══════════════════════════════════════════════════ */
+  .scroll-ind {
+    position: fixed; bottom: 38px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+    z-index: 9999; pointer-events: none;
+    opacity: 1; transition: opacity 0.5s;
+  }
+  .scroll-ind.gone { opacity: 0; }
+  .s-mouse {
+    width: 22px; height: 36px;
+    border: 1px solid rgba(139,92,246,0.35);
+    border-radius: 11px; position: relative;
+  }
+  .s-mouse::before {
+    content: ''; position: absolute;
+    top: 6px; left: 50%; transform: translateX(-50%);
+    width: 3px; height: 7px; border-radius: 2px;
+    background: var(--violet);
+    animation: s-bounce 2s ease-in-out infinite;
+  }
+  @keyframes s-bounce {
+    0%   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  }
+  .scroll-ind span {
+    font-family: var(--font-mono); font-size: 9px;
+    color: var(--txt-lo); letter-spacing: 3px; text-transform: uppercase;
+  }
+  @media (max-width: 640px) { .scroll-ind { display: none; } }
+
+  /* ═══════════════════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════════════════ */
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    z-index: 9999; padding: 11px 40px;
+    border-top: 1px solid var(--border-lo);
+    background: rgba(3,0,8,0.85);
+    display: flex; align-items: center;
+    justify-content: space-between; pointer-events: none;
+  }
+  @media (min-width: 769px) {
+    footer { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  }
+  footer p { font-family: var(--font-mono); font-size: 10.5px; color: var(--txt-lo); letter-spacing: 0.8px; }
+  #footerDepth { font-family: var(--font-mono); font-size: 10px; color: var(--txt-lo); letter-spacing: 1px; }
+  @media (max-width: 640px) { footer { padding: 9px 18px; } }
+
+  /* ═══════════════════════════════════════════════════
+     SECTION LABELS (shared)
+  ═══════════════════════════════════════════════════ */
+  .sec-label {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 5px; text-transform: uppercase;
+    color: var(--violet); display: block; margin-bottom: 12px;
+  }
+  .sec-title {
+    font-family: var(--font-ar);
+    font-size: clamp(30px,4.5vw,58px);
+    font-weight: 900; color: #fff; line-height: 1.05;
+  }
+  .sec-sub {
+    font-family: var(--font-ar);
+    font-size: clamp(14px,1.5vw,17px);
+    color: var(--txt-mid); margin-top: 12px; line-height: 1.75;
+  }
+
+  /* ═══════════════════════════════════════════════════
+     ██  PANEL 0 — HERO
+  ═══════════════════════════════════════════════════ */
+  #panel-hero { align-items: center; }
+
+  .hero-grid {
+    max-width: 1280px; width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 72px; align-items: center;
+  }
+
+  /* ── badge ── */
+  .hero-badge {
+    display: inline-flex; align-items: center;
+    gap: 9px; padding: 5px 18px 5px 14px;
+    background: rgba(139,92,246,0.08);
+    border: 1px solid rgba(139,92,246,0.28);
+    border-radius: 100px;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 3.5px; color: var(--violet);
+    text-transform: uppercase; margin-bottom: 26px;
+  }
+  .badge-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--fuchsia);
+    animation: pulse-dot 1.8s ease-in-out infinite;
+  }
+
+  /* ── Main English Name — AHMED GAMAL (Outfit 900) ── */
+  .hero-name-en {
+    direction: ltr; text-align: left;
+    font-family: var(--font-en);
+    font-size: clamp(52px, 8vw, 100px);
+    font-weight: 900; line-height: 0.92;
+    color: #fff; letter-spacing: -3px;
+    /* Layered glow text-shadow — GPU cheap */
+    text-shadow:
+      0 0 60px rgba(139,92,246,0.4),
+      0 0 140px rgba(139,92,246,0.15);
+    margin-bottom: 10px;
+  }
+
+  /* ── Gradient subtitle ── */
+  .hero-title-en {
+    direction: ltr; text-align: left;
+    font-family: var(--font-en);
+    font-size: clamp(14px, 2vw, 22px);
+    font-weight: 600; letter-spacing: 0.3px;
+    background: linear-gradient(120deg, #c084fc, #e879f9 50%, #818cf8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 22px;
+  }
+
+  /* ── English bio paragraph (LTR block inside RTL page) ── */
+  .hero-bio-en {
+    direction: ltr; text-align: left;
+    font-family: var(--font-mono);
+    font-size: clamp(12px, 1.1vw, 13.5px);
+    font-weight: 400;
+    color: var(--txt-mid); line-height: 2;
+    max-width: 490px; margin-bottom: 22px;
+    border-left: 2px solid rgba(139,92,246,0.4);
+    padding-left: 18px;
+  }
+
+  /* ── Arabic subtitle ── */
+  .hero-ar-sub {
+    font-family: var(--font-ar);
+    font-size: clamp(15px, 1.7vw, 19px); font-weight: 500;
+    color: var(--txt-mid); line-height: 1.9;
+    max-width: 470px; margin-bottom: 30px;
+  }
+
+  /* ── Stat chips ── */
+  .stat-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 34px; }
+  .stat-chip {
+    display: flex; align-items: center; gap: 7px;
+    padding: 7px 15px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-lo); border-radius: 10px;
+    font-family: var(--font-ar); font-size: 12px; color: var(--txt-mid);
+  }
+  .stat-chip strong { color: var(--txt-hi); font-weight: 800; }
+
+  /* ── CTA button ── */
+  .hero-cta {
+    display: inline-flex; align-items: center;
+    gap: 12px; padding: 15px 36px;
+    background: linear-gradient(135deg, #7c3aed, #a21caf);
+    color: #fff; font-family: var(--font-ar);
+    font-weight: 700; font-size: 15px;
+    border-radius: 14px; text-decoration: none;
+    position: relative; overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 32px rgba(124,58,237,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.12);
+  }
+  .hero-cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, #8b5cf6, #d946ef);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .hero-cta:hover { transform: translateY(-3px); box-shadow: 0 18px 52px rgba(124,58,237,0.55); }
+  .hero-cta:hover::before { opacity: 1; }
+  .hero-cta span, .hero-cta svg { position: relative; z-index: 1; }
+
+  /* ── Hero image side ── */
+  .hero-img-wrap {
+    position: relative; display: flex;
+    justify-content: center; align-items: center;
+  }
+  .hero-img-frame {
+    position: relative; border-radius: 28px; overflow: hidden;
+    border: 1px solid rgba(139,92,246,0.28);
+    box-shadow:
+      0 0 0 1px rgba(139,92,246,0.08),
+      0 24px 80px rgba(88,28,135,0.5),
+      0 0 130px rgba(139,92,246,0.2);
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    will-change: transform;
+  }
+  .hero-img-frame:hover { transform: scale(1.022); }
+  .hero-img-frame img { display: block; width: 100%; height: auto; }
+  .hero-img-frame::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(139,92,246,0.9), rgba(217,70,239,0.7), transparent);
+    z-index: 2;
+  }
+  .hero-img-frame::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(139,92,246,0.07) 0%, transparent 55%, rgba(217,70,239,0.04) 100%);
+    pointer-events: none; z-index: 2;
+  }
+
+  /* orbit rings (CSS-only animation, zero JS) */
+  .orbit-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid rgba(139,92,246,0.09);
+    animation: orbit-spin linear infinite;
+    will-change: transform;
+  }
+  .orbit-1 { width: 110%; height: 110%; top: -5%; left: -5%; animation-duration: 28s; }
+  .orbit-2 { width: 130%; height: 130%; top: -15%; left: -15%; animation-duration: 46s; animation-direction: reverse; border-color: rgba(217,70,239,0.06); }
+  @keyframes orbit-spin { to { transform: rotate(360deg); } }
+
+  .etalam-tag {
+    position: absolute; bottom: -18px; right: 24px;
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 20px;
+    background: rgba(3,0,8,0.94);
+    border: 1px solid var(--border-mid); border-radius: 40px;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--violet); letter-spacing: 1.5px;
+    white-space: nowrap;
+    box-shadow: 0 4px 24px rgba(139,92,246,0.32);
+  }
+  @media (min-width: 769px) {
+    .etalam-tag { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  }
+
+  /* ── Hero responsive ── */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 44px; text-align: center; }
+    .hero-name-en, .hero-title-en, .hero-bio-en { text-align: center; direction: rtl; }
+    .hero-bio-en { border-left: none; border-right: 2px solid rgba(139,92,246,0.4); padding-left: 0; padding-right: 18px; margin: 0 auto 22px; }
+    .hero-ar-sub { text-align: center; max-width: 100%; }
+    .stat-chips { justify-content: center; }
+    .hero-cta { width: 100%; justify-content: center; }
+    .orbit-ring { display: none; }
+    .etalam-tag { display: none; }
+  }
+
+  /* ═══════════════════════════════════════════════════
+     ██  PANEL 1 — SERVICES
+  ═══════════════════════════════════════════════════ */
+  #panel-services { align-items: flex-start; }
+
+  .services-hdr { margin-bottom: 48px; }
+
+  .bento-grid {
+    display: grid; grid-template-columns: repeat(12,1fr); gap: 16px;
+  }
+  .bento-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--border-lo); border-radius: 22px;
+    padding: 28px; position: relative; overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
+                border-color 0.4s, box-shadow 0.4s;
+    will-change: transform;
+  }
+  @media (min-width: 769px) {
+    .bento-card { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  }
+  @media (max-width: 768px) { .bento-card { background: var(--glass-solid); } }
+
+  .bento-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 0% 0%, rgba(139,92,246,0.07) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .bento-card::after {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 55%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(139,92,246,0.55));
+    opacity: 0; transition: opacity 0.4s;
+  }
+  @media (hover: hover) {
+    .bento-card:hover { transform: translateY(-7px); border-color: var(--border-mid); box-shadow: 0 18px 52px rgba(88,28,135,0.3), 0 0 0 1px rgba(139,92,246,0.08); }
+    .bento-card:hover::after { opacity: 1; }
+  }
+  .bento-card:nth-child(1) { grid-column: span 5; background: linear-gradient(135deg, rgba(14,5,34,0.92), rgba(9,2,22,0.85)); }
+  .bento-card:nth-child(2) { grid-column: span 7; }
+  .bento-card:nth-child(3) { grid-column: span 4; }
+  .bento-card:nth-child(4) { grid-column: span 4; }
+  .bento-card:nth-child(5) { grid-column: span 4; }
+
+  .bento-icon { font-size: 36px; display: block; margin-bottom: 16px; line-height: 1; }
+  .bento-title { font-family: var(--font-ar); font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 9px; }
+  .bento-desc  { font-family: var(--font-ar); font-size: 13px; color: var(--txt-mid); line-height: 1.85; }
+
+  @media (max-width: 1024px) {
+    .bento-card:nth-child(1),.bento-card:nth-child(2) { grid-column: span 6; }
+    .bento-card:nth-child(3),.bento-card:nth-child(4),.bento-card:nth-child(5) { grid-column: span 4; }
+  }
+  @media (max-width: 768px) {
+    .bento-grid { grid-template-columns: 1fr; gap: 12px; }
+    .bento-card:nth-child(n) { grid-column: span 1; }
+  }
+
+  /* ═══════════════════════════════════════════════════
+     ██  PANEL 2 — PROJECTS
+  ═══════════════════════════════════════════════════ */
+  #panel-projects { align-items: flex-start; }
+
+  .proj-hdr { text-align: center; margin-bottom: 36px; }
+
+  .filter-bar {
+    display: flex; flex-wrap: wrap;
+    gap: 9px; justify-content: center; margin-bottom: 32px;
+  }
+  .filter-btn {
+    padding: 9px 20px; border-radius: 100px;
+    font-family: var(--font-ar); font-size: 13px; font-weight: 600;
+    cursor: pointer; border: 1px solid var(--border-mid);
+    background: rgba(139,92,246,0.04); color: var(--txt-mid);
+    transition: color 0.28s, border-color 0.28s, transform 0.28s, box-shadow 0.28s;
+    outline: none; position: relative; overflow: hidden;
+  }
+  .filter-btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--violet), var(--fuchsia));
+    opacity: 0; transition: opacity 0.28s;
+  }
+  .filter-btn span { position: relative; z-index: 1; }
+  .filter-btn:hover { color: #fff; border-color: transparent; transform: translateY(-2px); }
+  .filter-btn:hover::before { opacity: 1; }
+  .filter-btn.active {
+    background: linear-gradient(135deg, #7c3aed, #a21caf);
+    color: #fff; border-color: transparent;
+    box-shadow: 0 4px 18px rgba(124,58,237,0.42);
+  }
+
+  .summary-box {
+    max-width: 860px; margin: 0 auto 36px;
+    padding: 16px 24px;
+    background: rgba(139,92,246,0.05);
+    border: 1px solid rgba(139,92,246,0.18);
+    border-radius: 14px; position: relative; overflow: hidden;
+  }
+  .summary-box::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--violet), transparent);
+  }
+  .summary-text {
+    font-family: var(--font-ar); color: var(--txt-mid);
+    font-size: 13.5px; line-height: 1.85;
+    text-align: center; transition: opacity 0.3s;
+  }
+
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 18px;
+  }
+  @media (max-width: 1024px) { .projects-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 640px)  { .projects-grid { grid-template-columns: 1fr; gap: 13px; } }
+
+  .project-card {
+    background: rgba(9,2,22,0.88);
+    border: 1px solid var(--border-lo); border-radius: 20px;
+    overflow: hidden; display: flex; flex-direction: column;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
+                box-shadow 0.4s, border-color 0.4s;
+    will-change: transform;
+  }
+  @media (min-width: 769px) {
+    .project-card { background: rgba(9,2,22,0.8); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  }
+  .project-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(139,92,246,0.04), transparent 60%, rgba(217,70,239,0.03));
+    pointer-events: none; z-index: 0; opacity: 0; transition: opacity 0.4s;
+  }
+  @media (hover: hover) {
+    .project-card:hover { transform: translateY(-10px); border-color: rgba(139,92,246,0.38); box-shadow: 0 20px 60px rgba(88,28,135,0.38), 0 0 0 1px rgba(139,92,246,0.1); }
+    .project-card:hover::before { opacity: 1; }
+    .project-card:hover .card-img img { transform: scale(1.07); }
+    .project-card:hover .card-glow { opacity: 1; }
+  }
+  .card-glow {
+    position: absolute; top: -40px; right: 50%; transform: translateX(50%);
+    width: 120px; height: 80px;
+    background: radial-gradient(ellipse, rgba(139,92,246,0.45), transparent 70%);
+    filter: blur(20px); opacity: 0; transition: opacity 0.4s;
+    pointer-events: none; z-index: 1;
+  }
+  .card-img {
+    height: 200px; overflow: hidden; position: relative;
+    background: rgba(0,0,0,0.45); display: flex;
+    align-items: center; justify-content: center;
+    padding: 14px; border-bottom: 1px solid var(--border-lo);
+  }
+  .card-img img {
+    max-width: 100%; max-height: 100%; object-fit: contain;
+    border-radius: 8px;
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5));
+  }
+  .card-cat-tag {
+    position: absolute; bottom: 10px; left: 10px;
+    padding: 3px 10px; background: rgba(139,92,246,0.14);
+    border: 1px solid rgba(139,92,246,0.28); border-radius: 100px;
+    font-size: 9px; font-family: var(--font-mono);
+    color: #c084fc; letter-spacing: 1.5px;
+  }
+  .card-body { padding: 18px 20px 22px; position: relative; z-index: 1; flex-grow: 1; display: flex; flex-direction: column; }
+  .card-title { font-family: var(--font-ar); font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 5px; line-height: 1.3; }
+  .card-desc  { font-family: var(--font-ar); font-size: 12.5px; color: var(--violet); font-weight: 600; margin-bottom: 12px; }
+  .card-dets  { list-style: none; display: flex; flex-direction: column; gap: 7px; margin-top: auto; }
+  .card-dets li {
+    font-family: var(--font-ar); font-size: 12px; color: var(--txt-mid);
+    line-height: 1.55; padding-right: 16px; position: relative;
+  }
+  .card-dets li::before {
+    content: ''; position: absolute; right: 0; top: 7px;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--violet), var(--fuchsia));
+  }
+  .card-fade {
+    opacity: 0; transform: translateY(22px);
+    animation: cardIn 0.55s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+
+  /* ═══════════════════════════════════════════════════
+     ██  PANEL 3 — CONTACT
+  ═══════════════════════════════════════════════════ */
+  #panel-contact { justify-content: center; align-items: center; text-align: center; }
+  .contact-inner { max-width: 660px; width: 100%; position: relative; }
+  .contact-inner::before {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%); width: 520px; height: 520px;
+    background: radial-gradient(ellipse, rgba(139,92,246,0.09) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .contact-title {
+    font-family: var(--font-ar);
+    font-size: clamp(30px,4.5vw,58px);
+    font-weight: 900; color: #fff; margin-bottom: 16px;
+    line-height: 1.1; position: relative;
+  }
+  .contact-sub {
+    font-family: var(--font-ar);
+    color: var(--txt-mid); font-size: 17px;
+    margin-bottom: 44px; line-height: 1.75; position: relative;
+  }
+  .whatsapp-btn {
+    display: inline-flex; align-items: center;
+    gap: 14px; padding: 17px 46px;
+    background: #128C7E; color: #fff;
+    font-family: var(--font-ar);
+    font-weight: 700; font-size: 16px;
+    border-radius: 16px; text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 40px rgba(18,140,126,0.38), inset 0 1px 0 rgba(255,255,255,0.1);
+    position: relative; overflow: hidden;
+  }
+  .whatsapp-btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .whatsapp-btn:hover { transform: translateY(-4px); box-shadow: 0 16px 56px rgba(18,140,126,0.55); }
+  .whatsapp-btn:hover::before { opacity: 1; }
+  .whatsapp-btn span, .whatsapp-btn svg { position: relative; z-index: 1; }
+
+  /* ── Mobile specific ── */
+  @media (max-width: 640px) {
+    .whatsapp-btn { padding: 15px 30px; width: 100%; justify-content: center; }
+    .filter-btn { padding: 7px 14px; font-size: 12px; }
+  }
+
+  /* ── GPU layer hints ── */
+  #navbar, footer, .hero-img-frame { transform: translateZ(0); }
+  #world-canvas { transform: translateZ(0); }
+  </style>
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════
+     LOADING SCREEN
+═══════════════════════════════════════ -->
+<div id="loader">
+  <div class="loader-name">AHMED <span>GAMAL</span></div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
+  <div class="loader-label" id="loaderLabel">Initializing 3D World…</div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     THREE.JS CANVAS
+═══════════════════════════════════════ -->
+<canvas id="world-canvas"></canvas>
+
+<!-- ═══════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    <span>AHMED GAMAL</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="goTo(0);return false;">البداية</a></li>
+    <li><a href="#" onclick="goTo(1);return false;">الخدمات</a></li>
+    <li><a href="#" onclick="goTo(2);return false;">المشاريع</a></li>
+    <li><a href="#" onclick="goTo(3);return false;">التواصل</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     PROGRESS RAIL
+═══════════════════════════════════════ -->
+<div class="progress-rail" id="progressRail">
+  <div class="pd on"  data-i="0"></div>
+  <div class="pd"     data-i="1"></div>
+  <div class="pd"     data-i="2"></div>
+  <div class="pd"     data-i="3"></div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     WORLD AMBIENT LABEL
+═══════════════════════════════════════ -->
+<div class="world-label" id="worldLabel">
+  <div class="world-label-text" id="worldLabelTxt"></div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PANEL 0 — HERO
+═══════════════════════════════════════ -->
+<section class="sp vis" id="panel-hero">
+  <div class="hero-grid">
+    <!-- Text column -->
+    <div>
+      <div class="hero-badge fu fu-d1">
+        <div class="badge-dot"></div>
+        <span>EDTECH INNOVATOR · 2026</span>
+      </div>
+
+      <!-- ★ CRITICAL FIX: AHMED GAMAL as primary H1 name ★ -->
+      <h1 class="hero-name-en fu fu-d2">AHMED<br>GAMAL</h1>
+      <div class="hero-title-en fu fu-d2">EdTech Innovator &nbsp;·&nbsp; AI Content Strategist &nbsp;·&nbsp; Etalam Founder</div>
+
+      <p class="hero-bio-en fu fu-d3">
+        Pioneering the future of digital education across the Arab world.
+        The&nbsp;<strong style="color:#c084fc">"Ahmed Gamal Style"</strong>&nbsp;— a proprietary framework
+        that transforms dense academic curricula into immersive, AI-powered
+        learning experiences. Trusted by students who demand results, not repetition.
+      </p>
+
+      <p class="hero-ar-sub fu fu-d3">
+        مبتكر المنصات التعليمية، استراتيجي المحتوى بالذكاء الاصطناعي،<br>
+        ومؤسس منصة&nbsp;<strong style="color:var(--violet)">اتعلم</strong> — نحو تعليم رقمي يصنع الفارق.
+      </p>
+
+      <div class="stat-chips fu fu-d4">
+        <div class="stat-chip"><strong>+50</strong>&nbsp;مشروع مُنجز</div>
+        <div class="stat-chip"><strong>AI</strong>&nbsp;محتوى أكاديمي</div>
+        <div class="stat-chip"><strong>ATS</strong>&nbsp;سير ذاتية</div>
+        <div class="stat-chip"><strong>Etalam</strong>&nbsp;منصة تعليمية</div>
+      </div>
+
+      <div class="fu fu-d5">
+        <a href="#" onclick="goTo(2);return false;" class="hero-cta">
+          <span>استكشف أعمالي</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg)"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Image column -->
+    <div class="hero-img-wrap fu fu-d2">
+      <div class="orbit-ring orbit-1"></div>
+      <div class="orbit-ring orbit-2"></div>
+      <div class="hero-img-frame">
+        <img src="images/hero.png" alt="Ahmed Gamal" loading="eager" fetchpriority="high">
+        <div class="etalam-tag">
+          <div class="badge-dot"></div>
+          ETALAM PLATFORM
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PANEL 1 — SERVICES
+═══════════════════════════════════════ -->
+<section class="sp" id="panel-services">
+  <div class="sp-scroll">
+    <div class="inner">
+      <div class="services-hdr">
+        <span class="sec-label fu fu-d1">// SERVICES</span>
+        <h2 class="sec-title fu fu-d2">خدماتي الشاملة</h2>
+        <p class="sec-sub fu fu-d3">حلول EdTech متكاملة تجمع بين الذكاء الاصطناعي والإبداع التعليمي</p>
+      </div>
+      <div class="bento-grid">
+        <div class="bento-card fu fu-d1">
+          <span class="bento-icon">🚀</span>
+          <h3 class="bento-title">منصة اتعلم التعليمية</h3>
+          <p class="bento-desc">تصميم وتطوير واجهات المنصة التعليمية بالكامل، تحسين تجربة المستخدم، ونشر الموقع عبر GitHub وNetlify لأداء خالٍ من المشاكل.</p>
+        </div>
+        <div class="bento-card fu fu-d2">
+          <span class="bento-icon">🧠</span>
+          <h3 class="bento-title">المحتوى الأكاديمي بالذكاء الاصطناعي</h3>
+          <p class="bento-desc">تبسيط المناهج المعقدة بأسلوب "أحمد جمال" الحصري — خرائط ذهنية، إنفوجرافيك، ملازم منسقة، وملفات مراجعة نهائية تعزز الفهم والحفظ.</p>
+        </div>
+        <div class="bento-card fu fu-d2">
+          <span class="bento-icon">🗺️</span>
+          <h3 class="bento-title">التعلم البصري</h3>
+          <p class="bento-desc">خرائط ذهنية تحوّل النصوص إلى روابط بصرية، وإنفوجرافيك يلخص الفصول في ثوانٍ للمراجعة السريعة والفعّالة.</p>
+        </div>
+        <div class="bento-card fu fu-d3">
+          <span class="bento-icon">📊</span>
+          <h3 class="bento-title">هندسة وتحليل البيانات</h3>
+          <p class="bento-desc">بناء قواعد بيانات Access، تحليل Excel المتقدم، واستخراج تقارير الربحية والمبيعات بدقة عالية.</p>
+        </div>
+        <div class="bento-card fu fu-d4">
+          <span class="bento-icon">💼</span>
+          <h3 class="bento-title">السير الذاتية (ATS)</h3>
+          <p class="bento-desc">هندسة سير ذاتية برمجية متوافقة مع أنظمة الـ ATS تضمن تخطي الفرز الآلي والحصول على مقابلات فورية.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PANEL 2 — PROJECTS
+═══════════════════════════════════════ -->
+<section class="sp" id="panel-projects">
+  <div class="sp-scroll">
+    <div class="inner">
+      <div class="proj-hdr">
+        <span class="sec-label fu fu-d1">// PORTFOLIO</span>
+        <h2 class="sec-title fu fu-d2">مشاريعي المميزة</h2>
+        <p class="sec-sub fu fu-d3">تصفح أبرز الحلول التعليمية والرقمية التي أنجزتها</p>
+      </div>
+      <div class="filter-bar fu fu-d3" id="filters">
+        <button onclick="filterP('all',this)" class="filter-btn active"><span>الكل</span></button>
+        <button onclick="filterP('web',this)" class="filter-btn"><span>منصات تعليمية</span></button>
+        <button onclick="filterP('academic',this)" class="filter-btn"><span>محتوى أكاديمي</span></button>
+        <button onclick="filterP('data',this)" class="filter-btn"><span>تحليل بيانات</span></button>
+        <button onclick="filterP('career',this)" class="filter-btn"><span>سير ذاتية (CV)</span></button>
+      </div>
+      <div class="summary-box fu fu-d4">
+        <p id="work-summary" class="summary-text"></p>
+      </div>
+      <div class="projects-grid" id="proj-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PANEL 3 — CONTACT
+═══════════════════════════════════════ -->
+<section class="sp" id="panel-contact">
+  <div class="contact-inner">
+    <span class="sec-label fu fu-d1" style="display:block;margin-bottom:14px">// GET IN TOUCH</span>
+    <h2 class="contact-title fu fu-d2">جاهز لنبدأ رحلتك التعليمية؟</h2>
+    <p class="contact-sub fu fu-d3">دعنا نحول رؤيتك الأكاديمية إلى تجربة رقمية استثنائية بأسلوب أحمد جمال الحصري.</p>
+    <div class="fu fu-d4">
+      <a href="https://wa.me/201101377014" target="_blank" class="whatsapp-btn">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        <span>تواصل عبر واتساب</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     SCROLL INDICATOR
+═══════════════════════════════════════ -->
+<div class="scroll-ind" id="scrollInd">
+  <div class="s-mouse"></div>
+  <span>SCROLL</span>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Ahmed Gamal · EdTech Innovator · Etalam Founder</p>
+  <div id="footerDepth">DEPTH: 0%</div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════
+     MASTER SCRIPT
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     SCROLL ARCHITECTURE — HOW OVERLAP IS ELIMINATED:
+     ─────────────────────────────────────────────────────
+     • 600 vh body → 4 sections × 150 vh each.
+     • scrollProgress (0→1) maps to scroll range.
+     • SEC_BOUNDS[i] = [start, end] in (0,1) space.
+       Hero:     0.00 → 0.22
+       Services: 0.25 → 0.47
+       Projects: 0.50 → 0.75
+       Contact:  0.78 → 1.00
+     • GAP between sections = ~3% scroll range.
+       During the gap, ALL panels are opacity:0.
+       This guarantees zero overlap — only ONE panel
+       is ever visible at a time.
+     • Opacity is driven by a smooth easing formula:
+         t = clamp((p - a) / 0.05, 0, 1)   → fade in
+         t = clamp((b - p) / 0.05, 0, 1)   → fade out
+         opacity = t * (1 - t) style is not used —
+         we simply use CSS transition + class toggle.
+       The .vis class is added only when the panel's
+       range is active; removed when scrollProgress
+       exits the range. CSS transition handles smoothing.
+═══════════════════════════════════════════════════════ -->
+<script>
+(function() {
+'use strict';
+
+/* ─────────────────────────────────────────────────
+   § 0. LOADING SEQUENCE
+───────────────────────────────────────────────── */
+const loaderEl  = document.getElementById('loader');
+const loaderBar = document.getElementById('loaderBar');
+const loaderLbl = document.getElementById('loaderLabel');
+
+function setLoad(pct, txt) {
+  loaderBar.style.width = pct + '%';
+  loaderLbl.textContent = txt;
+}
+
+setLoad(10, 'Loading fonts…');
+
+/* ─────────────────────────────────────────────────
+   § 1. DEVICE PROFILING
+───────────────────────────────────────────────── */
+const isMobile = window.innerWidth < 768;
+const DPR      = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+
+setLoad(25, 'Building 3D world…');
+
+/* ─────────────────────────────────────────────────
+   § 2. THREE.JS RENDERER
+───────────────────────────────────────────────── */
+const canvas   = document.getElementById('world-canvas');
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  alpha: false, antialias: false,
+  powerPreference: 'high-performance',
+  stencil: false, depth: true,
+});
+renderer.setSize(window.innerWidth, window.innerHeight, false);
+renderer.setPixelRatio(DPR);
+renderer.setClearColor(0x030008, 1);
+
+const scene = new THREE.Scene();
+scene.fog   = new THREE.FogExp2(0x030008, isMobile ? 0.011 : 0.007);
+
+const camera = new THREE.PerspectiveCamera(
+  60, window.innerWidth / window.innerHeight, 0.1, 600
+);
+
+/* ── Camera journey parameters ── */
+const CAM_BASE     = 80;   // hero Z
+const CAM_STRIDE   = 80;   // distance per section
+const CAM_SECTIONS = 4;
+
+camera.position.set(0, 0, CAM_BASE);
+
+setLoad(40, 'Placing particles…');
+
+/* ─────────────────────────────────────────────────
+   § 3. SCENE CONSTRUCTION
+   All geometry built once, uploaded to GPU,
+   then CPU-side arrays are eligible for GC.
+   BufferGeometry + AdditiveBlending only.
+───────────────────────────────────────────────── */
+
+/* ── 3a. Background particle cloud ──
+   Desktop: 1200 · Mobile: 280 (−77%)                */
+const BG_N  = isMobile ? 280 : 1200;
+const bgBuf = new Float32Array(BG_N * 3);
+for (let i = 0; i < BG_N; i++) {
+  const r   = 60 + Math.random() * 200;
+  const th  = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+  bgBuf[i*3]   = r * Math.sin(phi) * Math.cos(th);
+  bgBuf[i*3+1] = r * Math.sin(phi) * Math.sin(th);
+  bgBuf[i*3+2] = -Math.random() * CAM_STRIDE * (CAM_SECTIONS + 1);
+}
+const bgGeo = new THREE.BufferGeometry();
+bgGeo.setAttribute('position', new THREE.BufferAttribute(bgBuf, 3));
+scene.add(new THREE.Points(bgGeo, new THREE.PointsMaterial({
+  size: isMobile ? 0.32 : 0.20, color: 0x9d6fff,
+  transparent: true, opacity: 0.42,
+  blending: THREE.AdditiveBlending,
+  sizeAttenuation: true, depthWrite: false,
+})));
+
+/* ── 3b. Corridor tubes ──
+   Desktop: 14 · Mobile: 4 (−71%)                   */
+const TC = isMobile ? 4 : 14;
+const TR = isMobile ? 3 : 4;            // radial segments
+for (let t = 0; t < TC; t++) {
+  const angle  = (t / TC) * Math.PI * 2;
+  const radius = 14 + Math.random() * 10;
+  const pts    = [];
+  const segs   = (CAM_SECTIONS + 1) * 4;
+  for (let s = 0; s <= segs; s++) {
+    const zz = -s * (CAM_STRIDE / 4);
+    const aa = angle + s * 0.15 * (t % 2 === 0 ? 1 : -1);
+    const rr = radius + Math.sin(s * 0.7) * 4;
+    pts.push(new THREE.Vector3(Math.cos(aa)*rr, Math.sin(aa)*rr, zz));
+  }
+  const tGeo = new THREE.TubeGeometry(
+    new THREE.CatmullRomCurve3(pts),
+    Math.max(8, Math.floor(segs * 4 / (isMobile ? 8 : 4))),
+    0.04, TR, false
+  );
+  scene.add(new THREE.Mesh(tGeo, new THREE.MeshBasicMaterial({
+    color: t%3===0 ? 0x8b5cf6 : t%3===1 ? 0xd946ef : 0x22d3ee,
+    transparent: true, opacity: 0.06 + Math.random()*0.08,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  })));
+}
+
+setLoad(60, 'Connecting nodes…');
+
+/* ── 3c. Node networks ──
+   Desktop: 40/section · Mobile: 14/section (−65%)  */
+const NC       = isMobile ? 14 : 40;
+const coreObjs = [];
+const torusObjs= [];
+const nodeObjs = [];
+
+for (let sec = 0; sec < CAM_SECTIONS; sec++) {
+  const zC  = -(sec * CAM_STRIDE + CAM_STRIDE / 2);
+  const nps = [];
+  for (let n = 0; n < NC; n++) {
+    nps.push(new THREE.Vector3(
+      (Math.random()-0.5)*60,
+      (Math.random()-0.5)*40,
+      zC + (Math.random()-0.5)*CAM_STRIDE
+    ));
+  }
+
+  // Lines (inline distance² to avoid Vector3 allocation)
+  const lv = [];
+  const MD = 26 * 26;
+  for (let i = 0; i < NC; i++) {
+    for (let j = i+1; j < NC; j++) {
+      const dx=nps[i].x-nps[j].x, dy=nps[i].y-nps[j].y, dz=nps[i].z-nps[j].z;
+      if (dx*dx+dy*dy+dz*dz < MD) {
+        lv.push(nps[i].x,nps[i].y,nps[i].z, nps[j].x,nps[j].y,nps[j].z);
+      }
+    }
+  }
+  if (lv.length) {
+    const lGeo = new THREE.BufferGeometry();
+    lGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(lv), 3));
+    scene.add(new THREE.LineSegments(lGeo, new THREE.LineBasicMaterial({
+      color: sec%2===0 ? 0x7c3aed : 0xd946ef,
+      transparent: true, opacity: 0.10,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    })));
+  }
+
+  // Dot cloud
+  const db = new Float32Array(NC*3);
+  for (let k=0; k<NC; k++) { db[k*3]=nps[k].x; db[k*3+1]=nps[k].y; db[k*3+2]=nps[k].z; }
+  const dGeo = new THREE.BufferGeometry();
+  dGeo.setAttribute('position', new THREE.BufferAttribute(db, 3));
+  const dots = new THREE.Points(dGeo, new THREE.PointsMaterial({
+    size: 0.65, color: 0xc4b5fd,
+    transparent: true, opacity: 0.52,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  }));
+  scene.add(dots);
+  nodeObjs.push(dots);
+
+  // Icosahedron core (detail 0 on mobile → 12 tris vs 80)
+  const cGeo = new THREE.IcosahedronGeometry(isMobile?5:7, isMobile?0:1);
+  const core = new THREE.Mesh(cGeo, new THREE.MeshBasicMaterial({
+    color: sec%2===0 ? 0x8b5cf6 : 0x22d3ee,
+    wireframe: true, transparent: true, opacity: 0.07,
+  }));
+  core.position.z = zC;
+  scene.add(core);
+  coreObjs.push(core);
+
+  // Torus ring (24 radial on mobile vs 80)
+  const tGeo = new THREE.TorusGeometry(isMobile?9:13, 0.06, isMobile?6:8, isMobile?24:80);
+  const torus = new THREE.Mesh(tGeo, new THREE.MeshBasicMaterial({
+    color: 0xd946ef, transparent: true, opacity: 0.12,
+    blending: THREE.AdditiveBlending,
+  }));
+  torus.position.z = zC;
+  torus.rotation.x = Math.PI / 3;
+  scene.add(torus);
+  torusObjs.push(torus);
+}
+
+setLoad(80, 'Calibrating camera…');
+
+/* ─────────────────────────────────────────────────
+   § 4. CAMERA STATE (pre-allocated — zero GC in rAF)
+───────────────────────────────────────────────── */
+let targetCamZ = CAM_BASE;
+let actualCamZ = CAM_BASE;
+let mouseX = 0, mouseY = 0;
+let targetMX = 0, targetMY = 0;
+
+const CAM_LERP   = isMobile ? 0.09 : 0.055;
+const MOUSE_LERP = 0.04;
+
+// Pre-allocate lookAt target — reused every frame, zero allocation
+const _lookTgt = new THREE.Vector3();
+
+if (!isMobile) {
+  document.addEventListener('mousemove', function(e) {
+    targetMX = ((e.clientX / window.innerWidth)  - 0.5) * 6;
+    targetMY = ((e.clientY / window.innerHeight) - 0.5) * -4;
+  }, { passive: true });
+}
+
+/* ─────────────────────────────────────────────────
+   § 5. SCROLL → SECTION SYSTEM
+   
+   OVERLAP FIX: Sections have non-overlapping ranges
+   with a 3% gap between them. During the gap,
+   NO section has .vis, so all are opacity:0.
+───────────────────────────────────────────────── */
+const PANELS = [
+  document.getElementById('panel-hero'),
+  document.getElementById('panel-services'),
+  document.getElementById('panel-projects'),
+  document.getElementById('panel-contact'),
+];
+const DOTS   = document.querySelectorAll('.pd');
+const WL_TXT = ['', 'SERVICES', 'PORTFOLIO', 'CONTACT'];
+
+/*
+  Tighter, non-overlapping bounds with explicit gap:
+    Hero      0.00–0.22  (22% of scroll)
+    [gap]     0.22–0.25
+    Services  0.25–0.47
+    [gap]     0.47–0.50
+    Projects  0.50–0.75
+    [gap]     0.75–0.78
+    Contact   0.78–1.00
+*/
+const SEC = [
+  [0.00, 0.22],
+  [0.25, 0.47],
+  [0.50, 0.75],
+  [0.78, 1.00],
+];
+
+const worldLabel    = document.getElementById('worldLabel');
+const worldLabelTxt = document.getElementById('worldLabelTxt');
+const footerDepth   = document.getElementById('footerDepth');
+const scrollInd     = document.getElementById('scrollInd');
+const navbar        = document.getElementById('navbar');
+
+let scrollProgress = 0;
+let curSection     = 0;
+let scrollTick     = false;
+
+// Pre-allocated loop vars
+let _p = 0, _a = 0, _b = 0, _sec = 0, _inView = false, _inGap = true;
+
+function applyScroll() {
+  scrollTick = false;
+  const maxS = document.body.scrollHeight - window.innerHeight;
+  _p = maxS > 0 ? window.scrollY / maxS : 0;
+  scrollProgress = _p;
+
+  // Camera target — scroll only writes this, rAF lerps toward it
+  targetCamZ = CAM_BASE - _p * CAM_STRIDE * (CAM_SECTIONS - 1);
+
+  footerDepth.textContent = 'DEPTH: ' + Math.round(_p * 100) + '%';
+
+  // Section detection
+  _sec = Math.min(CAM_SECTIONS-1, _p * CAM_SECTIONS | 0);
+  if (_sec !== curSection) curSection = _sec;
+
+  // Panel visibility — STRICT NON-OVERLAPPING
+  _inGap = true;
+  for (let i = 0; i < 4; i++) {
+    _a = SEC[i][0]; _b = SEC[i][1];
+    _inView = _p >= _a && _p <= _b;
+    if (_inView !== PANELS[i].classList.contains('vis')) {
+      PANELS[i].classList.toggle('vis', _inView);
+    }
+    if (_inView) _inGap = false;
+  }
+
+  // Progress dots
+  for (let i = 0; i < 4; i++) {
+    if ((i === curSection) !== DOTS[i].classList.contains('on')) {
+      DOTS[i].classList.toggle('on', i === curSection);
+    }
+  }
+
+  // World ambient label (shows during gaps)
+  if (_inGap && WL_TXT[curSection]) {
+    worldLabelTxt.textContent = WL_TXT[curSection];
+    worldLabel.classList.add('vis');
+  } else {
+    worldLabel.classList.remove('vis');
+  }
+
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+  scrollInd.classList.toggle('gone', _p > 0.04);
+}
+
+window.addEventListener('scroll', function() {
+  if (scrollTick) return;
+  scrollTick = true;
+  requestAnimationFrame(applyScroll);
+}, { passive: true });
+
+/* ─────────────────────────────────────────────────
+   § 6. NAVIGATION
+───────────────────────────────────────────────── */
+window.goTo = function(idx) {
+  const a    = SEC[idx][0];
+  const maxS = document.body.scrollHeight - window.innerHeight;
+  window.scrollTo({ top: a * maxS, behavior: 'smooth' });
+};
+// expose for inline onclick on nav (global alias)
+window.navigateTo = window.goTo;
+
+/* ─────────────────────────────────────────────────
+   § 7. RAF PAUSE — IntersectionObserver + visibilitychange
+───────────────────────────────────────────────── */
+let rafActive    = false;
+let canvasInView = true;
+let tabVisible   = true;
+
+const io = new IntersectionObserver(function(entries) {
+  canvasInView = entries[0].isIntersecting;
+  if (canvasInView && tabVisible && !rafActive) startLoop();
+}, { threshold: 0 });
+io.observe(canvas);
+
+document.addEventListener('visibilitychange', function() {
+  tabVisible = document.visibilityState === 'visible';
+  if (tabVisible && canvasInView && !rafActive) startLoop();
+});
+
+/* ─────────────────────────────────────────────────
+   § 8. ANIMATION LOOP — ZERO ALLOCATIONS PER FRAME
+   All mutation targets are pre-allocated above.
+   No `new` inside animate() — ever.
+───────────────────────────────────────────────── */
+const clock = new THREE.Clock();
+let _t = 0;
+
+function animate() {
+  if (!canvasInView || !tabVisible) { rafActive = false; return; }
+  requestAnimationFrame(animate);
+
+  _t = clock.getElapsedTime();
+
+  // LERP camera Z (decoupled from scroll — silky smooth)
+  actualCamZ += (targetCamZ - actualCamZ) * CAM_LERP;
+
+  if (!isMobile) {
+    mouseX += (targetMX - mouseX) * MOUSE_LERP;
+    mouseY += (targetMY - mouseY) * MOUSE_LERP;
+  }
+
+  camera.position.x = mouseX;
+  camera.position.y = mouseY;
+  camera.position.z = actualCamZ;
+
+  // Reuse pre-allocated _lookTgt — zero GC
+  _lookTgt.set(mouseX * 0.1, mouseY * 0.1, actualCamZ - 60);
+  camera.lookAt(_lookTgt);
+
+  // Scene animations (mutations only, no allocation)
+  for (let i = 0; i < CAM_SECTIONS; i++) {
+    coreObjs[i].rotation.x  = _t * 0.06 + i;
+    coreObjs[i].rotation.y  = _t * 0.09 + i;
+    torusObjs[i].rotation.z = _t * 0.05 + i * 0.5;
+    if (!isMobile) torusObjs[i].rotation.y = _t * 0.03;
+    nodeObjs[i].rotation.y  = _t * 0.018 * (i%2===0 ? 1 : -1);
+  }
+
+  renderer.render(scene, camera);
+}
+
+function startLoop() {
+  if (rafActive) return;
+  rafActive = true;
+  clock.getDelta(); // flush stale time
+  animate();
+}
+
+/* ─────────────────────────────────────────────────
+   § 9. RESIZE (debounced — 150ms)
+───────────────────────────────────────────────── */
+let resizeT = 0;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeT);
+  resizeT = setTimeout(function() {
+    const w = window.innerWidth, h = window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, w<768?1.5:2));
+  }, 150);
+}, { passive: true });
+
+/* ─────────────────────────────────────────────────
+   § 10. PROJECTS DATA
+───────────────────────────────────────────────── */
+const SUMMARIES = {
+  all:     '🚀 أعمل دائماً على تطوير مهاراتي لتقديم حلول شاملة — تتنوع مشاريعي بين المنصات التعليمية، تحليل البيانات، المحتوى الأكاديمي، والسير الذاتية الاحترافية.',
+  web:     '🌐 أحدث أعمالي: استمرارية تطوير منصة اتعلم، تحسين أداء الاستضافة عبر GitHub وNetlify لضمان تجربة مستخدم خالية من المشاكل وسريعة الاستجابة.',
+  data:    '📊 أحدث أعمالي: تصميم قاعدة بيانات Access شاملة، وإعداد ملفات Excel متقدمة لتحليل الربحية واستخراج تقارير المبيعات بدقة واحترافية عالية.',
+  career:  '💼 أحدث أعمالي: هندسة سير ذاتية برمجية (ATS) مكّنت عدداً من العملاء من تخطي الفرز الآلي والحصول على مقابلات وظيفية فورية.',
+  academic:'📚 أحدث أعمالي: تجهيز ملازم الفصل الدراسي كاملاً، وتطوير خرائط ذهنية وإنفوجرافيك بأسلوب أحمد جمال الحصري لتسهيل الحفظ والمراجعة.',
+};
+const CAT_LABELS = { web:'WEB', data:'DATA', career:'CV', academic:'EDU' };
+
+const PROJECTS = [
+  {id:1,  cat:'web',      t:'المنصة التعليمية (اتعلم)',        d:'تصميم وتطوير واجهة المنصة',              img:'images/p1.jpg', info:['تصميم واجهة مستخدم (UI) احترافية لمنصة اتعلم.','ترتيب وتصنيف الأقسام لتسهيل وصول الطلاب.','برمجة متجاوبة تعمل بامتياز على شاشات الموبايل.']},
+  {id:2,  cat:'career',   t:'تصميم سيرة ذاتية (CV)',           d:'هيكلة CV متوافق مع أنظمة التوظيف',       img:'images/p2.jpg', info:['إبراز المهارات ونقاط القوة بوضوح وأناقة.','تنسيق هيكلي نظيف ومريح للعين لتسهيل القراءة.','استخدام كلمات مفتاحية تضمن تخطي الفرز الآلي.']},
+  {id:3,  cat:'data',     t:'مشروع قاعدة البيانات',            d:'نظام متكامل لحفظ وتحليل البيانات',        img:'images/p3.jpg', info:['تأسيس قواعد بيانات متكاملة ومترابطة بدقة.','تصميم واجهات استعلام لتسهيل استخراج التقارير.','تنظيم المعلومات لتوفير الوقت والجهد.']},
+  {id:4,  cat:'data',     t:'تحليل مبيعات وربحية (Excel)',     d:'إعداد تحليل بيانات واستخراج تقارير',     img:'images/p4.jpg', info:['إعداد تحليل للبيانات لاستخراج التقارير الدورية.','حساب الربحية ونسبة المبيعات بدقة عالية.','تجهيز الجداول والمعادلات الإحصائية لتسهيل القراءة.']},
+  {id:5,  cat:'academic', t:'إخراج وتنسيق المذكرات',           d:'تصميم الملازم والكتب الدراسية',           img:'images/p5.jpg', info:['تنسيق الفقرات والنصوص بطريقة تفتح النفس للمذاكرة.','ترتيب الفهارس والعناوين بشكل منهجي يسهل الوصول.','إخراج فني متكامل يرفع من جودة المحتوى العلمي.']},
+  {id:6,  cat:'academic', t:'المحتوى البصري التعليمي',         d:'تصاميم وإنفوجرافيك للمناهج',             img:'images/p6.jpg', info:['تلخيص فصول كاملة في نقاط مركزة.','التركيز على المصطلحات الهامة للاختبارات.','تصميم المحتوى بأسلوب (نمط أحمد جمال).']},
+  {id:7,  cat:'academic', t:'تصميم الخرائط الذهنية',           d:'تبسيط المناهج عبر الخرائط البصرية',      img:'images/p7.jpg', info:['تحويل النصوص المعقدة إلى خرائط ذهنية مترابطة.','استخدام الألوان والأشكال لتعزيز الذاكرة البصرية.','تلخيص المناهج لتسهيل المراجعة النهائية.']},
+  {id:8,  cat:'academic', t:'إعداد جداول المقارنات',           d:'ترتيب البيانات الأكاديمية بوضوح',         img:'images/p8.jpg', info:['تصميم جداول لتبسيط الاختلافات والمفاهيم.','تنسيق هوامش الصفحات وإبراز العناوين.','تنظيم النصوص الكثيفة بشكل احترافي.']},
+  {id:9,  cat:'academic', t:'ملفات المراجعات النهائية',        d:'تصميم أوراق العمل والنماذج',             img:'images/p9.jpg', info:['تنسيق أسئلة الاختبارات بشكل منظم.','مساحات مريحة للإجابات النموذجية.','إخراج الورقة بشكل يعكس دقة العمل.']},
+  {id:10, cat:'academic', t:'تنسيق وإعداد التقارير',           d:'إخراج التقارير الرسمية والأكاديمية',      img:'images/p10.jpg', info:['إعداد تقارير احترافية تعكس دقة واحترافية العمل.','تنسيق الهوامش والخطوط لتتناسب مع المعايير الرسمية.','عرض النتائج والتوصيات بشكل واضح ومقنع.']},
+];
+
+function mkCard(p, delay) {
+  const tag  = CAT_LABELS[p.cat] || p.cat.toUpperCase();
+  const info = (p.info||[]).map(function(d){ return '<li>'+d+'</li>'; }).join('');
+  return '<div class="project-card card-fade" style="animation-delay:'+delay+'ms">'
+       + '<div class="card-glow"></div>'
+       + '<div class="card-img"><img src="'+p.img+'" alt="'+p.t+'" loading="lazy" decoding="async">'
+       + '<span class="card-cat-tag">'+tag+'</span></div>'
+       + '<div class="card-body"><div class="card-title">'+p.t+'</div>'
+       + '<div class="card-desc">'+p.d+'</div>'
+       + (info ? '<ul class="card-dets">'+info+'</ul>' : '')
+       + '</div></div>';
+}
+
+function renderProjects(list) {
+  document.getElementById('proj-grid').innerHTML =
+    list.map(function(p,i){ return mkCard(p,i*55); }).join('');
+}
+
+window.filterP = function(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  const el = document.getElementById('work-summary');
+  el.style.opacity = '0';
+  setTimeout(function() {
+    el.textContent = SUMMARIES[cat] || SUMMARIES.all;
+    el.style.opacity = '1';
+  }, 240);
+  renderProjects(cat==='all' ? PROJECTS : PROJECTS.filter(function(p){ return p.cat===cat; }));
+};
+
+/* ─────────────────────────────────────────────────
+   § 11. INIT
+───────────────────────────────────────────────── */
+setLoad(95, 'Launching…');
+
+// Init projects
+document.getElementById('work-summary').textContent = SUMMARIES.all;
+renderProjects(PROJECTS);
+
+// Hero is already .vis in HTML
+applyScroll();
+
+// Start 3D loop
+startLoop();
+
+// Hide loader with a brief delay so scene compiles first
+setTimeout(function() {
+  setLoad(100, 'Ready.');
+  setTimeout(function() {
+    loaderEl.classList.add('hidden');
+  }, 300);
+}, 600);
+
+})();
+</script>
+</body>
+</html>
