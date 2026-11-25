@@ -86,7 +86,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: 'Et3alem Platform UI Design (اتعلم)',
-    tag: 'Recovered portfolio project',
+    tag: 'Selected project',
     description: 'Design and development of the platform interface.',
     image: '/images/projects/p1.jpg',
     bullets: [
@@ -97,7 +97,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: 'CV Design (تصميم سيرة ذاتية)',
-    tag: 'Recovered portfolio project',
+    tag: 'Selected project',
     description: 'CV design and structuring. Shown sample is anonymized.',
     image: '/images/projects/p2.jpg',
     bullets: [
@@ -108,7 +108,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: 'Database Project (مشروع قاعدة البيانات)',
-    tag: 'Recovered portfolio project',
+    tag: 'Selected project',
     description: 'An integrated system for storing and analyzing data.',
     image: '/images/projects/p3.jpg',
     bullets: [
@@ -119,7 +119,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: 'Sales and Profitability Analysis - Excel (تحليل مبيعات وربحية)',
-    tag: 'Recovered portfolio project',
+    tag: 'Selected project',
     description: 'Data analysis and report generation.',
     image: '/images/projects/p4.jpg',
     bullets: [
@@ -130,7 +130,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: 'Study Notes Typesetting (إخراج وتنسيق المذكرات)',
-    tag: 'Recovered portfolio project',
+    tag: 'Selected project',
     description: 'Design of study booklets and academic books.',
     image: '/images/projects/p5.jpg',
     bullets: [
@@ -141,7 +141,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: 'Educational Visual Content (المحتوى البصري التعليمي)',
-    tag: 'Recovered portfolio project',
+    tag: 'Selected project',
     description: 'Designs and infographics for curricula.',
     image: '/images/projects/p6.jpg',
     bullets: [
@@ -152,7 +152,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: 'Mind Map Design (تصميم الخرائط الذهنية)',
-    tag: 'Recovered portfolio project',
+    tag: 'Selected project',
     description: 'Simplifying curricula through visual maps.',
     image: '/images/projects/p7.jpg',
     bullets: [
@@ -163,7 +163,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: 'Comparison Tables (إعداد جداول المقارنات)',
-    tag: 'Recovered portfolio project',
+    tag: 'Selected project',
     description: 'Organizing academic data clearly.',
     image: '/images/projects/p8.jpg',
     bullets: [
@@ -174,7 +174,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: 'Final Revision Files (ملفات المراجعات النهائية)',
-    tag: 'Recovered portfolio project',
+    tag: 'Selected project',
     description: 'Design of worksheets and exam templates.',
     image: '/images/projects/p9.jpg',
     bullets: [
@@ -185,7 +185,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: 'Report Formatting (تنسيق وإعداد التقارير)',
-    tag: 'Recovered portfolio project',
+    tag: 'Selected project',
     description: 'Typesetting official and academic reports. Shown sample has student identifiers removed.',
     image: '/images/projects/p10.jpg',
     bullets: [
@@ -195,11 +195,11 @@ const PROJECTS: Project[] = [
     ]
   },
   {
-    title: 'Original Arabic Portfolio (Netlify)',
-    tag: 'Recovered artifact',
-    description: 'My original Arabic portfolio site, preserved as a recovered deployed artifact from its Netlify deployment. It is the deployed build, not the original source files. Third-party personal details in its images have been hidden.',
+    title: 'Earlier Arabic Portfolio',
+    tag: 'Earlier work',
+    description: 'My earlier Arabic portfolio site. Other people's personal details in its images have been hidden.',
     link: '/old-portfolio/',
-    linkLabel: 'View the preserved artifact'
+    linkLabel: 'View the earlier portfolio'
   },
   {
     title: 'Automation ROI Calculator',
