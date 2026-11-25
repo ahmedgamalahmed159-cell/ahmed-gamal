@@ -52,24 +52,6 @@ interface Project {
 
 const SERVICES: Service[] = [
   {
-    id: 'data',
-    title: 'Data Engineering & Dashboards',
-    icon: Database,
-    description: 'Turning raw data into clear decisions: organized datasets, Excel/Power BI style dashboards, and reporting that a business can actually use.',
-    benefits: ['Data cleaning & structuring', 'Dashboard design', 'Recurring reports', 'Custom visualizations'],
-    waMessage: 'I would like to request a custom Dashboard design.',
-    cta: 'Request a Dashboard'
-  },
-  {
-    id: 'admin',
-    title: 'Administrative Automation',
-    icon: Cpu,
-    description: 'Removing repetitive manual work with practical automation: spreadsheets, templates, and simple tools that cut errors and save hours.',
-    benefits: ['Workflow automation', 'Excel / VBA solutions', 'Document templates', 'Error reduction'],
-    waMessage: 'I need help with custom Administrative Automation solutions.',
-    cta: 'Start Automating'
-  },
-  {
     id: 'content',
     title: 'Educational Content Production',
     icon: Layers,
@@ -77,15 +59,6 @@ const SERVICES: Service[] = [
     benefits: ['Study guides & revision PDFs', 'Explainer video production', 'Channel management', 'Curriculum structuring'],
     waMessage: 'I am interested in educational content production.',
     cta: 'Produce My Content'
-  },
-  {
-    id: 'ai',
-    title: 'AI-Driven Workflows',
-    icon: Brain,
-    description: 'Practical AI integration for real work: prompt design, AI-assisted research, content generation pipelines, and quality review of model output.',
-    benefits: ['Prompt design', 'AI content pipelines', 'Output quality review', 'Tool setup & training'],
-    waMessage: 'I would like to explore AI-driven workflow solutions.',
-    cta: 'Explore AI Options'
   }
 ];
 
@@ -125,12 +98,12 @@ const PROJECTS: Project[] = [
   {
     title: 'CV Design (تصميم سيرة ذاتية)',
     tag: 'Recovered portfolio project',
-    description: 'CV structuring compatible with hiring systems (ATS). Shown sample is anonymized.',
+    description: 'CV design and structuring. Shown sample is anonymized.',
     image: '/images/projects/p2.jpg',
     bullets: [
       'Highlighting skills and strengths clearly and elegantly.',
       'Clean, eye-friendly structural formatting for easy reading.',
-      'Using relevant keywords for the target role to improve automated screening (ATS) compatibility.'
+      'Using clear, relevant wording for the target role.'
     ]
   },
   {
@@ -139,7 +112,7 @@ const PROJECTS: Project[] = [
     description: 'An integrated system for storing and analyzing data.',
     image: '/images/projects/p3.jpg',
     bullets: [
-      'Building integrated, precisely interrelated databases.',
+      'Building a database that links its tables together.',
       'Designing query interfaces to make report extraction easy.',
       'Organizing information to save time and effort.'
     ]
@@ -255,14 +228,14 @@ const CERTIFICATES = [
   },
   {
     title: 'Introduction to AI',
-    issuer: 'Course by Ibrahim Sobh',
+    issuer: 'Course completion',
     detail: 'Completed Oct 2026 · final quiz 12/12'
   }
 ];
 
 const SKILLS = [
   'AI-assisted research', 'Prompt design', 'Arabic content review',
-  'Fact-checking', 'Excel & dashboards', 'Google Sheets',
+  'Fact-checking', 'Excel analysis', 'Google Sheets',
   'Educational content', 'Voiceover & video production',
   'React / TypeScript (AI-assisted)', 'Firebase', 'GitHub', 'Vercel'
 ];
@@ -561,7 +534,7 @@ const Contact = () => {
                             Let's Build Something <span className="text-gradient">That Actually Ships.</span>
                         </h2>
                         <p className="text-lg text-slate-400 mb-10">
-                            Tell me about your data, content, or automation problem and I will reply with a concrete plan.
+                            Tell me what content or design work you need and I will reply with a concrete plan.
                         </p>
 
                         <div className="flex flex-wrap gap-4">
@@ -628,7 +601,7 @@ export default function App() {
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-brand-blue text-black text-[10px] font-black uppercase tracking-[0.2em] py-1.5 px-4 rounded-full w-fit mb-6"
                     >
-                        Data & AI Content Specialist · Egypt
+                        Commerce Student · Arabic Content Creator · Egypt
                     </motion.div>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
@@ -644,7 +617,7 @@ export default function App() {
                         transition={{ delay: 0.2 }}
                         className="text-slate-300 text-lg max-w-lg mb-10 leading-relaxed"
                     >
-                        I build practical data, automation, and Arabic educational content workflows — and I show real, checkable work instead of promises.
+                        I produce Arabic educational content and design work, and I show real, checkable work instead of promises.
                     </motion.p>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -681,7 +654,7 @@ export default function App() {
                         <BadgeCheck size={24} />
                     </div>
                     <div>
-                        <h4 className="text-xl font-black mb-2 uppercase tracking-wide">Certified AI Practitioner</h4>
+                        <h4 className="text-xl font-black mb-2 uppercase tracking-wide">AI Courses</h4>
                         <p className="text-xs text-slate-400 font-bold uppercase tracking-widest leading-loose">Google Gemini Certified Educator · Claude Academy ×2 · Intro to AI.</p>
                     </div>
                 </div>
@@ -701,7 +674,7 @@ export default function App() {
                         <span className="text-gradient">Real Things</span> People Use.
                     </h2>
                     <p className="text-lg text-slate-400 mb-10 leading-relaxed">
-                        I am a Commerce student (English Section, Assiut University) who builds in public: a live learning platform, published Arabic educational videos, a children's book on sale, and a small retail business I run day to day. I work with AI tools daily and review their output critically — that is my real workflow, not a slogan.
+                        I am a Commerce student (English Section, Assiut University) who builds in public: a live learning platform, published Arabic educational videos, a children's book on sale, and a small village grocery shop I run. I use AI tools such as ChatGPT and Gemini in my work.
                     </p>
                     <div className="grid grid-cols-3 gap-6">
                         <div className="space-y-1">
@@ -773,7 +746,7 @@ export default function App() {
       <footer className="py-12 bg-black border-t border-white/10">
         <div className="container mx-auto px-6 text-center">
             <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em] mb-4">
-                AHMED GAMAL • DATA & AI CONTENT • EDUCATIONAL MEDIA
+                AHMED GAMAL • ARABIC CONTENT • EDUCATIONAL MEDIA
             </p>
             <p className="text-[10px] text-slate-600 font-bold">
                 &copy; {new Date().getFullYear()} Ahmed Gamal. All Rights Reserved.
